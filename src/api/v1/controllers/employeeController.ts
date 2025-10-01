@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import * as employeeService from "../services/employeeService";
-import { Employee } from "src/data/employees";
+import { Employee, MatchingBranches } from "src/data/employees";
 import { HTTP_STATUS } from "../../constants/httpConstants";
 
 export const getAllEmployees = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -82,10 +82,22 @@ export const updateEmployee = async (req: Request, res: Response, next: NextFunc
 
 export const deleteEmployee = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const id= parseInt(req.params.id);
+        const id = parseInt(req.params.id);
         const deletedEmployee: Employee = await employeeService.deleteEmployee(id);
 
         res.status(HTTP_STATUS.OK).json({message: "Employee Deleted.", data: deletedEmployee});
+    } catch (error) {
+        res.status(HTTP_STATUS.NOT_FOUND).json({message: String(error)});
+        next(error);
+    }
+};
+
+export const getEmployeesByBranch = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try{
+        const branchId = parseInt(req.params.branchId);
+        const matchingBranches: MatchingBranches[] = await employeeService.getEmployeesByBranch(branchId);
+        res.status(HTTP_STATUS.OK).json({message: `Employees belonging to branch ${branchId}`, data: matchingBranches});
+        
     } catch (error) {
         res.status(HTTP_STATUS.NOT_FOUND).json({message: String(error)});
         next(error);

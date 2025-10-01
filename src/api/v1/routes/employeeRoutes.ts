@@ -4,7 +4,8 @@ import {
     createEmployee,
     getEmployeeById,
     updateEmployee,
-    deleteEmployee
+    deleteEmployee,
+    getEmployeesByBranch
 
 } from "../controllers/employeeController";
 const employeeRouter: Router = express.Router();
@@ -23,5 +24,8 @@ employeeRouter.put("/employees/:id", updateEmployee)
 
 // delete employee
 employeeRouter.delete("/employees/:id", deleteEmployee);
+
+// get employees by branch
+employeeRouter.get("/employees/branches/:branchId", getEmployeesByBranch)
 
 export default employeeRouter;
