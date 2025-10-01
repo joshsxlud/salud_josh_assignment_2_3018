@@ -60,7 +60,7 @@ export const getEmployeeById = async (req: Request, res: Response, next: NextFun
         const employee: Employee = await employeeService.getEmployeeById(id);
         res.status(HTTP_STATUS.OK).json({message: "Employee Found", data: employee});
     }
-    catch (error: unknown) {
+    catch (error) {
         res.status(HTTP_STATUS.NOT_FOUND).json({message: String(error)});
         next(error);
     }
