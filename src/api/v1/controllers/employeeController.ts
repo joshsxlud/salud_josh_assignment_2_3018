@@ -1,21 +1,22 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import * as employeeService from "../services/employeeService";
 import { Employee } from "src/data/employees";
 import { HTTP_STATUS } from "../../constants/httpConstants";
 
-export const getAllEmployees = async (req: Request, res: Response): Promise<void> => {
+export const getAllEmployees = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
 
     try{
         const employees: Employee[] = await employeeService.getAllEmployees();
         res.status(HTTP_STATUS.OK).json({message: "Get all employees", data: employees});
         
     } catch (error) {
-        res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Failed to retrieve employees."})
+        res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Failed to retrieve employees."});
+        next(error);
     }
 
 };
 
-export const createEmployee = async (req: Request, res: Response): Promise<void> => {
+export const createEmployee = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const employeeData: Omit<Employee, "id"> = req.body;
 
@@ -44,27 +45,28 @@ export const createEmployee = async (req: Request, res: Response): Promise<void>
             res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Branch Id is required."})
         }
 
-        const newEmployee = await employeeService.makeEmployee(employeeData)
-        res.status(HTTP_STATUS.CREATED).json({message: "Employee has been created.", data: newEmployee})
+        const newEmployee = await employeeService.makeEmployee(employeeData);
+        res.status(HTTP_STATUS.CREATED).json({message: "Employee has been created.", data: newEmployee});
         
     } catch (error) {
-        res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Failed to create an employee."})
+        res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Failed to create an employee."});
+        next(error);
     }
-
 };
 
-export const getEmployeeById = async (req: Request, res: Response): Promise<void> => {
+export const getEmployeeById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const id = parseInt(req.params.id);
         const employee: Employee = await employeeService.getEmployeeById(id);
         res.status(HTTP_STATUS.OK).json({message: "Employee Found", data: employee});
     }
-    catch (error) {
+    catch (error: unknown) {
         res.status(HTTP_STATUS.NOT_FOUND).json({message: String(error)});
+        next(error);
     }
 };
 
-export const updateEmployee = async (req: Request, res: Response): Promise<void> => {
+export const updateEmployee = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const id = parseInt(req.params.id);
         const employeeData: Pick<Employee, "position" | "branchId" | "department" | "email" | "phoneNumber"> = req.body;
@@ -74,10 +76,11 @@ export const updateEmployee = async (req: Request, res: Response): Promise<void>
         res.status(HTTP_STATUS.OK).json({message: "Employee information updated.", data: updatedEmployee});
     } catch (error) {
         res.status(HTTP_STATUS.NOT_FOUND).json({message: "Could not update employee."});
+        next(error);
     }
 };
 
-export const deleteEmployee = async (req: Request, res: Response): Promise<void> => {
+export const deleteEmployee = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const id= parseInt(req.params.id);
         const deletedEmployee: Employee = await employeeService.deleteEmployee(id);
@@ -85,5 +88,6 @@ export const deleteEmployee = async (req: Request, res: Response): Promise<void>
         res.status(HTTP_STATUS.OK).json({message: "Employee Deleted.", data: deletedEmployee});
     } catch (error) {
         res.status(HTTP_STATUS.NOT_FOUND).json({message: String(error)});
+        next(error);
     }
 };
