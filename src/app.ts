@@ -5,6 +5,7 @@ import employeeRoutes from "./api/v1/routes/employeeRoutes";
 const app: Express = express();
 
 app.use(morgan("combined"));
+app.use(express.json());
 
 app.get("/api/v1/health", (req, res) => {
     res.json({
