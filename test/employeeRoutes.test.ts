@@ -1,5 +1,4 @@
 import request, { Response } from "supertest";
-// import * as employeeService from "../src/api/v1/services/employeeService"; 
 import app from "../src/app"
 import { HTTP_STATUS } from "../src/api/constants/httpConstants";
 import { Employee } from "../src/data/employees";
