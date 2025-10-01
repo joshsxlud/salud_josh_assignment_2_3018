@@ -15,3 +15,29 @@ export const getAllBranches = async (req: Request, res: Response, next: NextFunc
     }
 
 };
+
+export const makeBranch = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const branchData: Omit<Branch, "id"> = req.body;
+
+        // Validate inputs
+
+        if (!branchData.name) {
+            res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Name is required."});
+        }
+
+        if (!branchData.phoneNumber) {
+            res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Phone number is required."});
+        }
+
+        if (!branchData.address) {
+            res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Address is required."});
+        }
+
+        const newBranch: Branch = await branchService.makeBranch(branchData);
+        res.status(HTTP_STATUS.CREATED).json({message: "Branch has been created.", data: newBranch});
+    } catch (error) {
+        res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Failed to create a branch."});
+        next(error);
+    }
+};
