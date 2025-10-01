@@ -1,7 +1,7 @@
 import request, { Response } from "supertest";
 import app from "../src/app"
 import { HTTP_STATUS } from "../src/api/constants/httpConstants";
-import { Employee } from "../src/data/employees";
+import { Employee, MatchingBranches } from "../src/data/employees";
 
 describe("GET /employees endpoint", () => {
     it("Should return all employees.", async () => {
@@ -161,5 +161,41 @@ describe("DELETE /api/v1/employees/:id", () => {
 
         // Assert
         expect(res.status).toBe(HTTP_STATUS.NOT_FOUND);
+    });
+});
+
+describe("GET /api/v1/employees/branches/:branchId", () => {
+    it("Should return a list of employees with a valid branchId.", async () => {
+
+        // Arrange
+        const branchId: number = 2;
+
+        // Act
+        const res: Response = await request(app).get(`/api/v1/employees/branches/${branchId}`);
+
+        // Assert
+        const expectedData: MatchingBranches[] = [
+        {
+            branchId: 2,
+            name: "Amandeep Singh",
+            department: "Customer Service"
+        },
+        {
+            branchId: 2,
+            name: "Linda Martinez",
+            department: "Advisory"
+        },
+        {
+            branchId: 2,
+            name: "David Turner",
+            department: "Advisory"
+        },
+        {
+            branchId: 2,
+            name: "Brandon Campbell",
+            department: "Advisory"
+        }
+    ]
+        expect(res.body.data).toMatchObject(expectedData)
     });
 });
