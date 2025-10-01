@@ -1,6 +1,7 @@
 import express, { Express } from "express";
 import morgan from "morgan";
 import employeeRoutes from "./api/v1/routes/employeeRoutes";
+import branchRoutes from "./api/v1/routes/branchRoutes";
 
 const app: Express = express();
 
@@ -17,5 +18,7 @@ app.get("/api/v1/health", (req, res) => {
 });
 
 app.use("/api/v1", employeeRoutes);
+app.use("/api/v1", branchRoutes);
+
 
 export default app;
