@@ -139,8 +139,28 @@ describe("PUT /api/v1/employees/:id endpoint", () => {
     });
 });
 
-describe("/api/employees/:id", () => {
+describe("DELETE /api/v1/employees/:id", () => {
     it("Should successfully delete an employee.", async () => {
+        
+        // Arrange
+        const employeeId: number = 1;
+        
+        // Act
+        const res: Response = await request(app).delete(`/api/v1/employees/${employeeId}`);
 
+        // Assert
+        expect(res.status).toBe(HTTP_STATUS.OK);
+    });
+
+    it("Should return an error when trying to delete an employee with invalid id.", async () => {
+
+        // Arrange
+        const employeeId: number = 100; 
+
+        // Act
+        const res: Response = await request(app).delete(`/api/v1/employees/${employeeId}`);
+
+        // Assert
+        expect(res.status).toBe(HTTP_STATUS.NOT_FOUND);
     });
 });
