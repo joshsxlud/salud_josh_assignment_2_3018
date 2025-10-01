@@ -53,3 +53,29 @@ export const getBranchById = async (req: Request, res: Response, next: NextFunct
         next(error);
     }
 };
+
+export const updateBranch = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const id = parseInt(req.params.id);
+        const branchData: Pick<Branch, "address" | "phoneNumber"> = req.body;
+
+        const updatedBranch = await branchService.updateBranch(id, branchData);
+
+        res.status(HTTP_STATUS.OK).json({message: "Branch information updated.", data: updatedBranch});
+    } catch (error) {
+        res.status(HTTP_STATUS.NOT_FOUND).json({message: String(error)});
+        next(error);
+    }
+};
+
+export const deleteBranch = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const id= parseInt(req.params.id);
+        const deletedBranch: Branch = await branchService.deleteBranch(id);
+
+        res.status(HTTP_STATUS.OK).json({message: "Branch Deleted.", data: deletedBranch});
+    } catch (error) {
+        res.status(HTTP_STATUS.NOT_FOUND).json({message: String(error)});
+        next(error);
+    }
+};
