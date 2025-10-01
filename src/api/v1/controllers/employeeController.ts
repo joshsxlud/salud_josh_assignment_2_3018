@@ -4,7 +4,7 @@ import { Employee } from "src/data/employees";
 import { HTTP_STATUS } from "../../constants/httpConstants";
 
 export const getAllEmployees = async (req: Request, res: Response): Promise<void> => {
-    
+
     try{
         const employees: Employee[] = await employeeService.getAllEmployees();
         res.status(HTTP_STATUS.OK).json({message: "Get all employees", data: employees});
@@ -61,5 +61,18 @@ export const getEmployeeById = async (req: Request, res: Response): Promise<void
     }
     catch (error) {
         res.status(HTTP_STATUS.NOT_FOUND).json({message: String(error)});
+    }
+};
+
+export const updateEmployee = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const id = parseInt(req.params.id);
+        const employeeData: Pick<Employee, "position" | "branchId" | "department" | "email" | "phoneNumber"> = req.body;
+
+        const updatedEmployee = await employeeService.updateEmployee(id, employeeData);
+
+        res.status(HTTP_STATUS.OK).json({message: "Employee information updated.", data: updatedEmployee});
+    } catch (error) {
+        res.status(HTTP_STATUS.NOT_FOUND).json({message: "Could not update employee."});
     }
 };

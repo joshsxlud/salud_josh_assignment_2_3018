@@ -38,3 +38,25 @@ export const getEmployeeById = async (id: number): Promise<Employee> => {
 
     return employeeById;
 };
+
+export const updateEmployee = async (
+    id: number,
+    employeeData: Pick<Employee, "position" | "department" | "email" | "phoneNumber" | "branchId">
+): Promise<Employee> => {
+
+    const index: number = employees.findIndex((employee: Employee) => employee.id === id);
+
+    if (index === -1) {
+        throw new Error("Employee not found.");
+    }
+
+    const updatedEmployee: Employee = {
+        ...employees[index],
+        ...employeeData
+    };
+
+    // Update employee array with updated fields
+    employees[index] = updatedEmployee;
+
+    return structuredClone(updatedEmployee);
+};

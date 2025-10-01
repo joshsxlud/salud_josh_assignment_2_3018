@@ -2,7 +2,8 @@ import express, { Router } from "express";
 import { 
     getAllEmployees,
     createEmployee,
-    getEmployeeById
+    getEmployeeById,
+    updateEmployee
 
 } from "../controllers/employeeController";
 const employeeRouter: Router = express.Router();
@@ -16,8 +17,8 @@ employeeRouter.get("/employees/:id", getEmployeeById);
 // create employee
 employeeRouter.post("/employees", createEmployee);
 
-// // update employee
-// employeeRouter.put("/employees/:id")
+// update employee
+employeeRouter.put("/employees/:id", updateEmployee)
 
 // // delete employee
 // employeeRouter.delete("/employees/:id");
