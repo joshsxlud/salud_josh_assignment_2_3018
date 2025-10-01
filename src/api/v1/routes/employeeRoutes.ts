@@ -1,18 +1,20 @@
 import express, { Router } from "express";
-
+import { getAllEmployees } from "../controllers/employeeController";
 const employeeRouter: Router = express.Router();
 
 // get all
-employeeRouter.get("/employees");
+employeeRouter.get("/employees", getAllEmployees);
 
-// get by id
-employeeRouter.get("/employees/:id");
+// // get by id
+// employeeRouter.get("/employees/:id");
 
-// create employee
-employeeRouter.post("/employees");
+// // create employee
+// employeeRouter.post("/employees");
 
-// update employee
-employeeRouter.put("/employees/:id")
+// // update employee
+// employeeRouter.put("/employees/:id")
 
-// delete employee
-employeeRouter.delete("/employees/:id");
+// // delete employee
+// employeeRouter.delete("/employees/:id");
+
+export default employeeRouter;
