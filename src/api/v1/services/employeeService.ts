@@ -60,3 +60,18 @@ export const updateEmployee = async (
 
     return structuredClone(updatedEmployee);
 };
+
+export const deleteEmployee = async (id: number): Promise<Employee> => {
+
+    const index: number = employees.findIndex((employee: Employee) => employee.id === id);
+
+    if (index === -1) {
+        throw new Error("Employee not found.");
+    }
+
+
+    // Remove employee from the array
+    const [deletedEmployee] = employees.splice(index, 1);
+
+    return deletedEmployee;
+};

@@ -76,3 +76,14 @@ export const updateEmployee = async (req: Request, res: Response): Promise<void>
         res.status(HTTP_STATUS.NOT_FOUND).json({message: "Could not update employee."});
     }
 };
+
+export const deleteEmployee = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const id= parseInt(req.params.id);
+        const deletedEmployee: Employee = await employeeService.deleteEmployee(id);
+
+        res.status(HTTP_STATUS.OK).json({message: "Employee Deleted.", data: deletedEmployee});
+    } catch (error) {
+        res.status(HTTP_STATUS.NOT_FOUND).json({message: String(error)});
+    }
+};
