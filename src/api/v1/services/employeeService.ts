@@ -36,7 +36,7 @@ export const getEmployeeById = async (id: number): Promise<Employee> => {
         throw new Error("Employee not found.");
     }
 
-    return employeeById;
+    return structuredClone(employeeById);
 };
 
 export const updateEmployee = async (
@@ -49,6 +49,14 @@ export const updateEmployee = async (
     if (index === -1) {
         throw new Error("Employee not found.");
     }
+    // Allowed fields
+    const allowedFields = ["position", "department", "email", "phoneNumber", "branchId"];
+
+    // Compare incoming fields with allowed fields 
+    const invalidFields: String[] = Object.keys(employeeData).filter(key => !allowedFields.includes(key));
+    if (invalidFields.length > 0) {
+        throw new Error(`Invalid field(s) provided: ${invalidFields.join(", ")}`);
+    }
 
     const updatedEmployee: Employee = {
         ...employees[index],
@@ -58,7 +66,7 @@ export const updateEmployee = async (
     // Update employee array with updated fields
     employees[index] = updatedEmployee;
 
-    return structuredClone(updatedEmployee);
+    return structuredClone(employees[index]);
 };
 
 export const deleteEmployee = async (id: number): Promise<Employee> => {
@@ -68,7 +76,6 @@ export const deleteEmployee = async (id: number): Promise<Employee> => {
     if (index === -1) {
         throw new Error("Employee not found.");
     }
-
 
     // Remove employee from the array
     const [deletedEmployee] = employees.splice(index, 1);

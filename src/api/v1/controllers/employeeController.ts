@@ -75,7 +75,7 @@ export const updateEmployee = async (req: Request, res: Response, next: NextFunc
 
         res.status(HTTP_STATUS.OK).json({message: "Employee information updated.", data: updatedEmployee});
     } catch (error) {
-        res.status(HTTP_STATUS.NOT_FOUND).json({message: "Could not update employee."});
+        res.status(HTTP_STATUS.NOT_FOUND).json({message: String(error)});
         next(error);
     }
 };

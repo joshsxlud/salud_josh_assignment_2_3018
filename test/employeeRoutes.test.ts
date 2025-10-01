@@ -95,4 +95,52 @@ describe("GET /employees/:id endpoint", () => {
     });
 });
 
-describe("PUT /api/v1/employees/:id",)
+describe("PUT /api/v1/employees/:id endpoint", () => {
+    it("Should return an updated employee.", async () => {
+        
+        // Arrange
+        const employeeId: number = 1;
+        const updatedEmployee: Partial<Employee> = {
+            position: "Test Position"
+        };
+
+        // Act
+        const res: Response = await request(app).put(`/api/v1/employees/${employeeId}`).send(updatedEmployee);
+        expect(res.status).toBe(HTTP_STATUS.OK);
+        expect(res.body.data.position).toBe("Test Position");
+    });
+
+    it("Should return an error when employee not found.", async () => {
+    
+        // Arrange 
+        const employeeId: number = 100;
+        
+        // Act
+        const res: Response = await request(app).get(`/api/v1/employees/${employeeId}`);
+        
+        // Assert
+        expect(res.status).toBe(HTTP_STATUS.NOT_FOUND);
+    });
+
+    it("Should return an error when trying to update incorrect fields.", async () => {
+
+        // Arrange
+        const employeeId: number = 1;
+        const invalidUpdate = {
+            fakeField: "Fake"
+        };
+
+        // Act
+        const res: Response = await request(app).put(`/api/v1/employees/${employeeId}`).send(invalidUpdate);
+
+        // Assert
+        expect(res.status).toBe(HTTP_STATUS.NOT_FOUND);
+
+    });
+});
+
+describe("/api/employees/:id", () => {
+    it("Should successfully delete an employee.", async () => {
+
+    });
+});
