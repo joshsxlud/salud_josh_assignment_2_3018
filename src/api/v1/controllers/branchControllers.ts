@@ -41,3 +41,15 @@ export const makeBranch = async (req: Request, res: Response, next: NextFunction
         next(error);
     }
 };
+
+export const getBranchById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const id = parseInt(req.params.id);
+        const branch: Branch = await branchService.getBranchById(id);
+        res.status(HTTP_STATUS.OK).json({message: "Branch Found", data: branch});
+    }
+    catch (error) {
+        res.status(HTTP_STATUS.NOT_FOUND).json({message: String(error)});
+        next(error);
+    }
+};

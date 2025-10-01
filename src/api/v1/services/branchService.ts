@@ -18,3 +18,20 @@ export const makeBranch = async (branchData: Omit<Branch, "id">
     return newBranch;
 };
 
+export const getBranchById = async (id: number): Promise<Branch> => {
+    let branchById: Branch | undefined;
+
+    for (const branch of branches) {
+        if (branch.id === id) {
+
+            // Assign as a copy
+            branchById = {...branch};
+        }
+    }
+
+    if (!branchById) {
+        throw new Error("Branch not found.");
+    }
+
+    return structuredClone(branchById);
+};
