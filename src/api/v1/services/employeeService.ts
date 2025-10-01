@@ -1,4 +1,4 @@
-import { employees, Employee } from "../../../data/employees";
+import { employees, Employee, MatchingBranches, MatchingDepartment } from "../../../data/employees";
 
 export const getAllEmployees = async (): Promise<Employee[]> => {
     
@@ -81,4 +81,44 @@ export const deleteEmployee = async (id: number): Promise<Employee> => {
     const [deletedEmployee] = employees.splice(index, 1);
 
     return deletedEmployee;
+};
+
+export const getEmployeesByBranch = async (branchId: number): Promise<MatchingBranches[]> => {
+    let matchingBranches: MatchingBranches[] = [];
+
+    for (const employee of employees) {
+        if (employee.branchId === branchId) {
+            
+            const { branchId, name, department} = employee;
+
+            matchingBranches.push({branchId,name, department})
+        }
+    }
+
+    // When branchId does not match any employees
+    if (matchingBranches.length === 0) {
+        throw new Error("This branch has no employees.");
+    }
+
+    return matchingBranches;
+};
+
+export const getEmployeesByDepartment = async (department: string): Promise<MatchingDepartment[]> => {
+    let MatchingDepartments: MatchingDepartment[] = [];
+
+    for (const employee of employees) {
+        if (employee.department === department) {
+            
+            const { branchId, name, department} = employee;
+
+            MatchingDepartments.push({branchId, name, department})
+        }
+    }
+
+    // When the department does not match any employees
+    if (MatchingDepartments.length === 0) {
+        throw new Error("This department has no employees.");
+    }
+
+    return MatchingDepartments;
 };

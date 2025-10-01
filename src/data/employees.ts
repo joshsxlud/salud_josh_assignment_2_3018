@@ -1,11 +1,23 @@
 export interface Employee {
-    id: number;
-    name: string;
-    position: string;
-    department: string;
-    email: string;
-    phoneNumber: number;
-    branchId: number;
+  id: number;
+  name: string;
+  position: string;
+  department: string;
+  email: string;
+  phoneNumber: number;
+  branchId: number;
+}
+
+export interface MatchingBranches {
+  branchId: number;
+  name: string;
+  department: string;
+}
+
+export interface MatchingDepartment {
+  name: string;
+  branchId: number;
+  department: string;
 }
 
 export const employees: Employee[] = [
