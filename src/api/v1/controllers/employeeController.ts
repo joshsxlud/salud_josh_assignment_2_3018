@@ -22,29 +22,29 @@ export const createEmployee = async (req: Request, res: Response, next: NextFunc
 
         // Validate inputs
         if (!employeeData.name) {
-            res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Name is required."})
+            res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Name is required."});
         }
 
         if (!employeeData.position) {
-            res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Position is required."})
+            res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Position is required."});
         }
 
         if (!employeeData.department) {
-            res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Department is required."})
+            res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Department is required."});
         }
 
         if (!employeeData.email) {
-            res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Email is required."})
+            res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Email is required."});
         }
 
         if (!employeeData.phoneNumber) {
-            res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Phone number is required."})
+            res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Phone number is required."});
         }
 
         if (!employeeData.branchId) {
-            res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Branch Id is required."})
+            res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Branch Id is required."});
         }
-
+        // TODO: Destructure later 
         const newEmployee = await employeeService.makeEmployee(employeeData);
         res.status(HTTP_STATUS.CREATED).json({message: "Employee has been created.", data: newEmployee});
         

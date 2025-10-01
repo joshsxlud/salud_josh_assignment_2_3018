@@ -57,3 +57,42 @@ describe("POST /employees endpoint", () => {
         expect(res.status).toBe(HTTP_STATUS.BAD_REQUEST);
     });
 });
+
+describe("GET /employees/:id endpoint", () => {
+    it("Should successfully retrieve employee by Id.", async () => {
+
+        // Arrange
+        const employeeId: number = 1; 
+
+        // Act
+        const res: Response = await request(app).get(`/api/v1/employees/${employeeId}`);
+        
+        // Assert
+        const expectedEmployee = { 
+            id: 1,
+            name: "Alice Johnson",
+            position: "Branch Manager",
+            department: "Management",
+            email: "alice.johnson@pixell-river.com",
+            phoneNumber: 6045550148,
+            branchId: 1
+            } 
+
+        expect(res.status).toBe(HTTP_STATUS.OK);
+        expect(res.body.data).toMatchObject(expectedEmployee);
+    });
+
+    it("Should return an error when id does not exist.", async () => {
+        
+        // Arrange 
+        const employeeId: number = 100;
+        
+        //  Act
+        const res: Response = await request(app).get(`/api/v1/employees/${employeeId}`);
+        
+        // Assert
+        expect(res.status).toBe(HTTP_STATUS.NOT_FOUND);
+    });
+});
+
+describe("PUT /api/v1/employees/:id",)
