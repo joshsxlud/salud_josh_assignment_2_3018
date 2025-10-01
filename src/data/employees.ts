@@ -14,6 +14,12 @@ export interface MatchingBranches {
   department: string;
 }
 
+export interface MatchingDepartment {
+  name: string;
+  branchId: number;
+  department: string;
+}
+
 export const employees: Employee[] = [
   { id: 1, name: "Alice Johnson", position: "Branch Manager", department: "Management", email: "alice.johnson@pixell-river.com", phoneNumber: 6045550148, branchId: 1 },
   { id: 2, name: "Amandeep Singh", position: "Customer Service Representative", department: "Customer Service", email: "amandeep.singh@pixell-river.com", phoneNumber: 7805550172, branchId: 2 },

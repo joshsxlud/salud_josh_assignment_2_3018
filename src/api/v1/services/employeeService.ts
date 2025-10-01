@@ -1,4 +1,4 @@
-import { employees, Employee, MatchingBranches } from "../../../data/employees";
+import { employees, Employee, MatchingBranches, MatchingDepartment } from "../../../data/employees";
 
 export const getAllEmployees = async (): Promise<Employee[]> => {
     
@@ -101,4 +101,24 @@ export const getEmployeesByBranch = async (branchId: number): Promise<MatchingBr
     }
 
     return matchingBranches;
+};
+
+export const getEmployeesByDepartment = async (department: string): Promise<MatchingDepartment[]> => {
+    let MatchingDepartments: MatchingDepartment[] = [];
+
+    for (const employee of employees) {
+        if (employee.department === department) {
+            
+            const { branchId, name, department} = employee;
+
+            MatchingDepartments.push({branchId, name, department})
+        }
+    }
+
+    // When the department does not match any employees
+    if (MatchingDepartments.length === 0) {
+        throw new Error("This department has no employees.");
+    }
+
+    return MatchingDepartments;
 };

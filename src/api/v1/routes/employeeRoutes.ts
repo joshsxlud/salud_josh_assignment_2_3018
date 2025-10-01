@@ -5,7 +5,8 @@ import {
     getEmployeeById,
     updateEmployee,
     deleteEmployee,
-    getEmployeesByBranch
+    getEmployeesByBranch,
+    getEmployeesByDepartment
 
 } from "../controllers/employeeController";
 const employeeRouter: Router = express.Router();
@@ -20,12 +21,15 @@ employeeRouter.get("/employees/:id", getEmployeeById);
 employeeRouter.post("/employees", createEmployee);
 
 // update employee
-employeeRouter.put("/employees/:id", updateEmployee)
+employeeRouter.put("/employees/:id", updateEmployee);
 
 // delete employee
 employeeRouter.delete("/employees/:id", deleteEmployee);
 
 // get employees by branch
-employeeRouter.get("/employees/branches/:branchId", getEmployeesByBranch)
+employeeRouter.get("/employees/branches/:branchId", getEmployeesByBranch);
+
+// get employees by department
+employeeRouter.get("/employees/departments/:department", getEmployeesByDepartment);
 
 export default employeeRouter;
