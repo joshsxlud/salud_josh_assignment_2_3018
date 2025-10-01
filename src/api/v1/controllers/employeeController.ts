@@ -12,14 +12,14 @@ export const getAllEmployees = async (req: Request, res: Response): Promise<void
     } catch (error) {
         res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Failed to retrieve employees."})
     }
-    
-    
+
 };
 
 export const createEmployee = async (req: Request, res: Response): Promise<void> => {
     try {
         const employeeData: Omit<Employee, "id"> = req.body;
 
+        // Validate inputs
         if (!employeeData.name) {
             res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Name is required."})
         }
@@ -51,4 +51,15 @@ export const createEmployee = async (req: Request, res: Response): Promise<void>
         res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Failed to create an employee."})
     }
 
+};
+
+export const getEmployeeById = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const id = parseInt(req.params.id);
+        const employee: Employee = await employeeService.getEmployeeById(id);
+        res.status(HTTP_STATUS.OK).json({message: "Employee Found", data: employee});
+    }
+    catch (error) {
+        res.status(HTTP_STATUS.NOT_FOUND).json({message: String(error)});
+    }
 };

@@ -20,3 +20,21 @@ export const makeEmployee = async (employeeData: Omit<Employee, "id">
     employees.push(newEmployee);
     return newEmployee;
 };
+
+export const getEmployeeById = async (id: number): Promise<Employee> => {
+    let employeeById: Employee | undefined;
+
+    for (const employee of employees) {
+        if (employee.id === id) {
+
+            // Assign as a copy
+            employeeById = {...employee};
+        }
+    }
+
+    if (!employeeById) {
+        throw new Error("Employee not found.");
+    }
+
+    return employeeById;
+};
