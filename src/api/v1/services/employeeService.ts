@@ -46,8 +46,8 @@ export const getEmployeeById = async (id: number): Promise<Employee> => {
     for (const employee of employees) {
         if (employee.id === id) {
 
-            // Assign as a copy
-            employeeById = {...employee};
+            employeeById = employee;
+            break;
         }
     }
 

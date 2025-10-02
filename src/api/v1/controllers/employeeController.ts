@@ -7,7 +7,7 @@ import { HTTP_STATUS } from "../../constants/httpConstants";
  * Controller to retrieve all employees.
  * 
  * @param req - Express request object.
- * @param res - Express request object.
+ * @param res - Express response object.
  * @param next - Passes control to the next middleware.
  */
 export const getAllEmployees = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -26,7 +26,7 @@ export const getAllEmployees = async (req: Request, res: Response, next: NextFun
  * Controller to create a new employee.
  * 
  * @param req - Express request object.
- * @param res - Express request object.
+ * @param res - Express response object.
  * @param next - Passes control to the next middleware.
  */
 export const createEmployee = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -101,7 +101,7 @@ export const createEmployee = async (req: Request, res: Response, next: NextFunc
  * Controller to retrieve an employee by their Id.
  * 
  * @param req - Express request object.
- * @param res - Express request object.
+ * @param res - Express response object.
  * @param next - Passes control to the next middleware. 
  */
 export const getEmployeeById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -120,7 +120,7 @@ export const getEmployeeById = async (req: Request, res: Response, next: NextFun
  * Controller to update an existing employee's information.
  * 
  * @param req - Express request object.
- * @param res - Express request object.
+ * @param res - Express response object.
  * @param next - Passes control to the next middleware.
  */
 export const updateEmployee = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -141,7 +141,7 @@ export const updateEmployee = async (req: Request, res: Response, next: NextFunc
  * Controller to delete an employee.
  * 
  * @param req - Express request object.
- * @param res - Express request object.
+ * @param res - Express response object.
  * @param next - Passes control to the next middleware. 
  */
 export const deleteEmployee = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -160,7 +160,7 @@ export const deleteEmployee = async (req: Request, res: Response, next: NextFunc
  * Controller to retrieve employees who's work at the same branch.
  * 
  * @param req - Express request object.
- * @param res - Express request object.
+ * @param res - Express response object.
  * @param next - Passes control to the next middleware. 
  */
 export const getEmployeesByBranch = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -179,7 +179,7 @@ export const getEmployeesByBranch = async (req: Request, res: Response, next: Ne
  * Controller to retrieve employees who work in the same department.
  * 
  * @param req - Express request object.
- * @param res - Express request object.
+ * @param res - Express response object.
  * @param next - Passes control to the next middleware. 
  */
 export const getEmployeesByDepartment = async (req: Request, res: Response, next: NextFunction): Promise<void> => {

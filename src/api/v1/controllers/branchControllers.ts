@@ -7,7 +7,7 @@ import { HTTP_STATUS } from "../../constants/httpConstants";
  * Controller to retrieve all branches.
  * 
  * @param req - Express request object.
- * @param res - Express request object.
+ * @param res - Express response object.
  * @param next - Passes control to the next middleware.
  */
 export const getAllBranches = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -26,7 +26,7 @@ export const getAllBranches = async (req: Request, res: Response, next: NextFunc
  * Controller to create a new branch.
  * 
  * @param req - Express request object.
- * @param res - Express request object.
+ * @param res - Express response object.
  * @param next - Passes control to the next middleware.
  */
 export const makeBranch = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -59,7 +59,7 @@ export const makeBranch = async (req: Request, res: Response, next: NextFunction
  * Controller to retrieve a branch by it's Id.
  * 
  * @param req - Express request object.
- * @param res - Express request object.
+ * @param res - Express response object.
  * @param next - Passes control to the next middleware.
  */
 export const getBranchById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -79,7 +79,7 @@ export const getBranchById = async (req: Request, res: Response, next: NextFunct
  * Controller to update an existing branch's information.
  * 
  * @param req - Express request object.
- * @param res - Express request object.
+ * @param res - Express response object.
  * @param next - Passes control to the next middleware.
  */
 export const updateBranch = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -100,7 +100,7 @@ export const updateBranch = async (req: Request, res: Response, next: NextFuncti
  * Controller to delete an existing branch.
  * 
  * @param req - Express request object.
- * @param res - Express request object.
+ * @param res - Express response object.
  * @param next - Passes control to the next middleware.
  */
 export const deleteBranch = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
