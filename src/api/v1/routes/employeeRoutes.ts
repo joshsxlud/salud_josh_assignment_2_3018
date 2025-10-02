@@ -9,27 +9,29 @@ import {
     getEmployeesByDepartment
 
 } from "../controllers/employeeController";
+
+ // Router handling employee routes
 const employeeRouter: Router = express.Router();
 
-// get all
+// GET all employees
 employeeRouter.get("/employees", getAllEmployees);
 
-// get by id
+// GET employees by id
 employeeRouter.get("/employees/:id", getEmployeeById);
 
-// create employee
+// POST new employees
 employeeRouter.post("/employees", createEmployee);
 
-// update employee
+// PUT existing employees
 employeeRouter.put("/employees/:id", updateEmployee);
 
-// delete employee
+// DELETE existing employees
 employeeRouter.delete("/employees/:id", deleteEmployee);
 
-// get employees by branch
+// GET all employees with matching branches
 employeeRouter.get("/employees/branches/:branchId", getEmployeesByBranch);
 
-// get employees by department
+// GET all employees with matching departments
 employeeRouter.get("/employees/departments/:department", getEmployeesByDepartment);
 
 export default employeeRouter;

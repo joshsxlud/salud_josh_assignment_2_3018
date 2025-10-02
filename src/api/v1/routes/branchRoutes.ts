@@ -7,21 +7,22 @@ import {
     deleteBranch
  } from "../../v1/controllers/branchControllers";
 
+ // Router handling branch routes
 const branchRouter: Router = express.Router();
 
-// Get all
+// GET all branches
 branchRouter.get("/branches", getAllBranches);
 
-//get by id
+// GET branches by id
 branchRouter.get("/branches/:id", getBranchById);
 
-// create branch
+// POST new branches
 branchRouter.post("/branches", makeBranch);
 
-// update branch
+// PUT existing branches
 branchRouter.put("/branches/:id", updateBranch);
 
-// delete branch
+// DELETE existing branches
 branchRouter.delete("/branches/:id", deleteBranch);
 
 export default branchRouter;
