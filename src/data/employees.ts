@@ -1,3 +1,4 @@
+// An interface representing an employee
 export interface Employee {
   id: number;
   name: string;
@@ -8,18 +9,21 @@ export interface Employee {
   branchId: number;
 }
 
+// An interface representing employees with similar branchIds
 export interface MatchingBranches {
   branchId: number;
   name: string;
   department: string;
 }
 
+// An interface representing employees with similar departments
 export interface MatchingDepartment {
   name: string;
   branchId: number;
   department: string;
 }
 
+// An array of different employee objects
 export const employees: Employee[] = [
   { id: 1, name: "Alice Johnson", position: "Branch Manager", department: "Management", email: "alice.johnson@pixell-river.com", phoneNumber: 6045550148, branchId: 1 },
   { id: 2, name: "Amandeep Singh", position: "Customer Service Representative", department: "Customer Service", email: "amandeep.singh@pixell-river.com", phoneNumber: 7805550172, branchId: 2 },

@@ -1,3 +1,4 @@
+// An interface representing a branch
 export interface Branch {
     id: number;
     name: string;
@@ -5,6 +6,7 @@ export interface Branch {
     phoneNumber: number;
 }
 
+// An array of branch objects
 export const branches: Branch[] = [
   { id: 1, name: "Vancouver Branch", address: "1300 Burrard St, Vancouver, BC, V6Z 2C7", phoneNumber: 6044560022 },
   { id: 2, name: "Edmonton Branch", address: "7250 82 Ave NW, Edmonton, AB, T6B 0G4", phoneNumber: 7804686800 },
