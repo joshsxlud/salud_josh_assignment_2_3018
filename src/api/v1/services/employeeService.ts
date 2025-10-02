@@ -84,7 +84,7 @@ export const deleteEmployee = async (id: number): Promise<Employee> => {
 };
 
 export const getEmployeesByBranch = async (branchId: number): Promise<MatchingBranches[]> => {
-    let matchingBranches: MatchingBranches[] = [];
+    const matchingBranches: MatchingBranches[] = [];
 
     for (const employee of employees) {
         if (employee.branchId === branchId) {
@@ -104,7 +104,7 @@ export const getEmployeesByBranch = async (branchId: number): Promise<MatchingBr
 };
 
 export const getEmployeesByDepartment = async (department: string): Promise<MatchingDepartment[]> => {
-    let MatchingDepartments: MatchingDepartment[] = [];
+    const MatchingDepartments: MatchingDepartment[] = [];
 
     for (const employee of employees) {
         if (employee.department === department) {

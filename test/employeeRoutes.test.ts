@@ -67,7 +67,7 @@ describe("GET /employees/:id endpoint", () => {
         const res: Response = await request(app).get(`/api/v1/employees/${employeeId}`);
 
         // Assert
-        const expectedEmployee = { 
+        const expectedEmployee: Employee = { 
             id: 1,
             name: "Alice Johnson",
             position: "Branch Manager",
@@ -75,7 +75,7 @@ describe("GET /employees/:id endpoint", () => {
             email: "alice.johnson@pixell-river.com",
             phoneNumber: 6045550148,
             branchId: 1
-            } 
+            }
 
         expect(res.status).toBe(HTTP_STATUS.OK);
         expect(res.body.data).toMatchObject(expectedEmployee);

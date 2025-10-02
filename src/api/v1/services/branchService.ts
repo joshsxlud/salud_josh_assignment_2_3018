@@ -51,7 +51,7 @@ export const updateBranch = async (
     const allowedFields: string[] = ["phoneNumber", "address"];
 
     // Compare incoming fields with allowed fields 
-    const invalidFields: String[] = Object.keys(branchData).filter(key => !allowedFields.includes(key));
+    const invalidFields: string[] = Object.keys(branchData).filter(key => !allowedFields.includes(key));
     if (invalidFields.length > 0) {
         throw new Error(`Invalid field(s) provided: ${invalidFields.join(", ")}`);
     }
