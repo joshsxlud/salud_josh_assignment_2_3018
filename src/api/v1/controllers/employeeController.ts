@@ -3,8 +3,14 @@ import * as employeeService from "../services/employeeService";
 import { Employee, MatchingBranches, MatchingDepartment } from "src/data/employees";
 import { HTTP_STATUS } from "../../constants/httpConstants";
 
+/**
+ * Controller to retrieve all employees.
+ * 
+ * @param req - Express request object.
+ * @param res - Express request object.
+ * @param next - Passes control to the next middleware.
+ */
 export const getAllEmployees = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-
     try{
         const employees: Employee[] = await employeeService.getAllEmployees();
         res.status(HTTP_STATUS.OK).json({message: "Get all employees", data: employees});
@@ -16,6 +22,13 @@ export const getAllEmployees = async (req: Request, res: Response, next: NextFun
 
 };
 
+/**
+ * Controller to create a new employee.
+ * 
+ * @param req - Express request object.
+ * @param res - Express request object.
+ * @param next - Passes control to the next middleware.
+ */
 export const createEmployee = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
             const {
@@ -84,6 +97,13 @@ export const createEmployee = async (req: Request, res: Response, next: NextFunc
     }
 };
 
+/**
+ * Controller to retrieve an employee by their Id.
+ * 
+ * @param req - Express request object.
+ * @param res - Express request object.
+ * @param next - Passes control to the next middleware. 
+ */
 export const getEmployeeById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const id: number = parseInt(req.params.id);
@@ -96,6 +116,13 @@ export const getEmployeeById = async (req: Request, res: Response, next: NextFun
     }
 };
 
+/**
+ * Controller to update an existing employee's information.
+ * 
+ * @param req - Express request object.
+ * @param res - Express request object.
+ * @param next - Passes control to the next middleware.
+ */
 export const updateEmployee = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const id: number = parseInt(req.params.id);
@@ -110,6 +137,13 @@ export const updateEmployee = async (req: Request, res: Response, next: NextFunc
     }
 };
 
+/**
+ * Controller to delete an employee.
+ * 
+ * @param req - Express request object.
+ * @param res - Express request object.
+ * @param next - Passes control to the next middleware. 
+ */
 export const deleteEmployee = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const id: number = parseInt(req.params.id);
@@ -122,6 +156,13 @@ export const deleteEmployee = async (req: Request, res: Response, next: NextFunc
     }
 };
 
+/**
+ * Controller to retrieve employees who's work at the same branch.
+ * 
+ * @param req - Express request object.
+ * @param res - Express request object.
+ * @param next - Passes control to the next middleware. 
+ */
 export const getEmployeesByBranch = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try{
         const branchId: number = parseInt(req.params.branchId);
@@ -134,6 +175,13 @@ export const getEmployeesByBranch = async (req: Request, res: Response, next: Ne
     }
 };
 
+/**
+ * Controller to retrieve employees who work in the same department.
+ * 
+ * @param req - Express request object.
+ * @param res - Express request object.
+ * @param next - Passes control to the next middleware. 
+ */
 export const getEmployeesByDepartment = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try{
         const department: string = req.params.department;

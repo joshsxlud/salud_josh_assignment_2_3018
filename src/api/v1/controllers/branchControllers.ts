@@ -76,7 +76,7 @@ export const getBranchById = async (req: Request, res: Response, next: NextFunct
 };
 
 /**
- * Controller to update an existing branch.
+ * Controller to update an existing branch's information.
  * 
  * @param req - Express request object.
  * @param res - Express request object.
