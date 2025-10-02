@@ -3,8 +3,14 @@ import * as branchService from "../services/branchService";
 import { Branch } from "src/data/branches";
 import { HTTP_STATUS } from "../../constants/httpConstants";
 
+/**
+ * Controller to retrieve all branches.
+ * 
+ * @param req - Express request object.
+ * @param res - Express request object.
+ * @param next - Passes control to the next middleware.
+ */
 export const getAllBranches = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-
     try{
         const branches: Branch[] = await branchService.getAllBranches();
         res.status(HTTP_STATUS.OK).json({message: "Get all branches", data: branches});
@@ -16,6 +22,13 @@ export const getAllBranches = async (req: Request, res: Response, next: NextFunc
 
 };
 
+/**
+ * Controller to create a new branch.
+ * 
+ * @param req - Express request object.
+ * @param res - Express request object.
+ * @param next - Passes control to the next middleware.
+ */
 export const makeBranch = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const branchData: Omit<Branch, "id"> = req.body;
@@ -42,6 +55,13 @@ export const makeBranch = async (req: Request, res: Response, next: NextFunction
     }
 };
 
+/**
+ * Controller to retrieve a branch by it's Id.
+ * 
+ * @param req - Express request object.
+ * @param res - Express request object.
+ * @param next - Passes control to the next middleware.
+ */
 export const getBranchById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const id: number = parseInt(req.params.id);
@@ -55,6 +75,13 @@ export const getBranchById = async (req: Request, res: Response, next: NextFunct
     }
 };
 
+/**
+ * Controller to update an existing branch.
+ * 
+ * @param req - Express request object.
+ * @param res - Express request object.
+ * @param next - Passes control to the next middleware.
+ */
 export const updateBranch = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const id: number = parseInt(req.params.id);
@@ -69,6 +96,13 @@ export const updateBranch = async (req: Request, res: Response, next: NextFuncti
     }
 };
 
+/**
+ * Controller to delete an existing branch.
+ * 
+ * @param req - Express request object.
+ * @param res - Express request object.
+ * @param next - Passes control to the next middleware.
+ */
 export const deleteBranch = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const id: number = parseInt(req.params.id);
