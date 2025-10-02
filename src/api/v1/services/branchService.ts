@@ -1,10 +1,21 @@
 import { branches, Branch } from "../../../data/branches";
 
+/**
+ * A service to retrieve all branches.
+ * 
+ * @returns A structure clone of all the branches to avoid direct mutation.
+ */
 export const getAllBranches = async (): Promise<Branch[]> => {
     
     return structuredClone(branches);
 };
 
+/**
+ * A service to create new branches.
+ * 
+ * @param branchData - Information of the branch.
+ * @returns - The newly created branch.
+ */
 export const makeBranch = async (branchData: Omit<Branch, "id">
 ): Promise<Branch> => {
     const newBranch: Branch = {
@@ -18,6 +29,13 @@ export const makeBranch = async (branchData: Omit<Branch, "id">
     return newBranch;
 };
 
+/**
+ * A service to retrieve branches by their id.
+ * 
+ * @param id - The id of the branch being searched.
+ * @returns - A restructured clone of the branch object to avoid direct mutation
+ *            of the branch object. 
+ */
 export const getBranchById = async (id: number): Promise<Branch> => {
     let branchById: Branch | undefined;
 
@@ -36,6 +54,14 @@ export const getBranchById = async (id: number): Promise<Branch> => {
     return structuredClone(branchById);
 };
 
+/**
+ * A service to update an existing branch.
+ * 
+ * @param id - The id of the branch being updated.
+ * @param branchData - The information being updated. 
+ * @returns - A structured clone of the updated branch to avoid direct mutation
+ *            of the branch object.
+ */
 export const updateBranch = async (
     id: number,
     branchData: Pick<Branch, "address" | "phoneNumber">
@@ -67,6 +93,12 @@ export const updateBranch = async (
     return structuredClone(branches[index]);
 };
 
+/**
+ * A service to delete an existing branch.
+ * 
+ * @param id - The id of the branch being deleted.
+ * @returns - The deleted branch object.
+ */
 export const deleteBranch = async (id: number): Promise<Branch> => {
 
     const index: number = branches.findIndex((branch: Branch) => branch.id === id);
