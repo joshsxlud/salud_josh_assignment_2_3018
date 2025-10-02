@@ -1,10 +1,22 @@
 import { employees, Employee, MatchingBranches, MatchingDepartment } from "../../../data/employees";
 
+/**
+ * A service to retrieve all employees.
+ * 
+ * @returns - A structured clone of all of the employees to avoid
+ *            direct mutation.
+ */
 export const getAllEmployees = async (): Promise<Employee[]> => {
     
     return structuredClone(employees);
 };
 
+/**
+ * A service to create new employees.
+ * 
+ * @param employeeData - Data of the employee being created.
+ * @returns - The newly created employee object.
+ */
 export const makeEmployee = async (employeeData: Omit<Employee, "id">
 ): Promise<Employee> => {
     const newEmployee: Employee = {
@@ -21,6 +33,13 @@ export const makeEmployee = async (employeeData: Omit<Employee, "id">
     return newEmployee;
 };
 
+/**
+ * A service to retrieve employees by their id.
+ * 
+ * @param id - The id of the employee being searched.
+ * @returns - A structured clone of the employee object to avoid
+ *            direct mutation.
+ */
 export const getEmployeeById = async (id: number): Promise<Employee> => {
     let employeeById: Employee | undefined;
 
@@ -39,6 +58,14 @@ export const getEmployeeById = async (id: number): Promise<Employee> => {
     return structuredClone(employeeById);
 };
 
+/**
+ * A service to update employee information.
+ * 
+ * @param id - The id of the employee being updated.
+ * @param employeeData - The data being updated.
+ * @returns - A structured clone of the updated employee to avoid
+ *            direct mutation.
+ */
 export const updateEmployee = async (
     id: number,
     employeeData: Pick<Employee, "position" | "department" | "email" | "phoneNumber" | "branchId">
@@ -69,6 +96,12 @@ export const updateEmployee = async (
     return structuredClone(employees[index]);
 };
 
+/**
+ * A service to delete an employee. 
+ * 
+ * @param id - The id of the employee being deleted.
+ * @returns - The deleted employee object.
+ */
 export const deleteEmployee = async (id: number): Promise<Employee> => {
 
     const index: number = employees.findIndex((employee: Employee) => employee.id === id);
@@ -83,6 +116,12 @@ export const deleteEmployee = async (id: number): Promise<Employee> => {
     return deletedEmployee;
 };
 
+/**
+ * A service to retrieve employees working at the same branch.
+ * 
+ * @param branchId - The id of the branch being searched.
+ * @returns - An array of employees that work at the same branch.
+ */
 export const getEmployeesByBranch = async (branchId: number): Promise<MatchingBranches[]> => {
     const matchingBranches: MatchingBranches[] = [];
 
@@ -103,6 +142,12 @@ export const getEmployeesByBranch = async (branchId: number): Promise<MatchingBr
     return matchingBranches;
 };
 
+/**
+ * A service to retrieve employees that work in the same branch.
+ * 
+ * @param department - The department being searched.
+ * @returns - An array of employees in the same department.
+ */
 export const getEmployeesByDepartment = async (department: string): Promise<MatchingDepartment[]> => {
     const MatchingDepartments: MatchingDepartment[] = [];
 
