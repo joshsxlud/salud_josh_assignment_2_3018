@@ -31,19 +31,37 @@ export const getAllBranches = async (req: Request, res: Response, next: NextFunc
  */
 export const makeBranch = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const branchData: Omit<Branch, "id"> = req.body;
+        const {
+            name,
+            address,
+            phoneNumber
+        }: {
+            name: string,
+            address: string;
+            phoneNumber: number;
+        } = req.body;
 
         // Validate inputs
-        if (!branchData.name) {
+        if (!name) {
             res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Name is required."});
         }
 
-        if (!branchData.phoneNumber) {
+        if (!phoneNumber) {
             res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Phone number is required."});
         }
 
-        if (!branchData.address) {
+        if (!address) {
             res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Address is required."});
+        }
+
+        const branchData: {
+            name: string;
+            address: string;
+            phoneNumber: number;
+        } = {
+            name: name,
+            address: address,
+            phoneNumber: phoneNumber
         }
 
         const newBranch: Branch = await branchService.makeBranch(branchData);
