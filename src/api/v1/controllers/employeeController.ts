@@ -18,34 +18,63 @@ export const getAllEmployees = async (req: Request, res: Response, next: NextFun
 
 export const createEmployee = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const employeeData: Omit<Employee, "id"> = req.body;
+            const {
+                name,
+                position,
+                department,
+                email,
+                phoneNumber,
+                branchId
+            }: {
+                name: string,
+                position: string,
+                department: string;
+                email: string;
+                phoneNumber: number;
+                branchId: number;
+            } = req.body;
 
         // Validate inputs
-        if (!employeeData.name) {
+        if (!name) {
             res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Name is required."});
         }
 
-        if (!employeeData.position) {
+        if (!position) {
             res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Position is required."});
         }
 
-        if (!employeeData.department) {
+        if (!department) {
             res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Department is required."});
         }
 
-        if (!employeeData.email) {
+        if (!email) {
             res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Email is required."});
         }
 
-        if (!employeeData.phoneNumber) {
+        if (!phoneNumber) {
             res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Phone number is required."});
         }
 
-        if (!employeeData.branchId) {
+        if (!branchId) {
             res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Branch Id is required."});
         }
 
-        // TODO: Destructure later 
+        const employeeData: {
+            name: string;
+            position: string;
+            department: string;
+            email: string;
+            phoneNumber: number;
+            branchId: number;
+        } = {
+            name: name,
+            position: position,
+            department: department,
+            email: email,
+            phoneNumber: phoneNumber,
+            branchId: branchId
+        }
+
         const newEmployee: Employee = await employeeService.makeEmployee(employeeData);
         res.status(HTTP_STATUS.CREATED).json({message: "Employee has been created.", data: newEmployee});
 

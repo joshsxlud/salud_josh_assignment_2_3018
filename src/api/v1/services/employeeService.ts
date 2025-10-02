@@ -89,7 +89,7 @@ export const getEmployeesByBranch = async (branchId: number): Promise<MatchingBr
     for (const employee of employees) {
         if (employee.branchId === branchId) {
             
-            const { branchId, name, department} = employee;
+            const {branchId, name, department} = employee;
 
             matchingBranches.push({branchId, name, department})
         }
