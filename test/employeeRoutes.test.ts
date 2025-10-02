@@ -5,7 +5,7 @@ import { Employee, MatchingBranches, MatchingDepartment } from "../src/data/empl
 
 describe("GET /employees endpoint", () => {
     it("Should return all employees.", async () => {
-        
+
         // Act
         const res: Response = await request(app).get("/api/v1/employees");
 
@@ -65,7 +65,7 @@ describe("GET /employees/:id endpoint", () => {
 
         // Act
         const res: Response = await request(app).get(`/api/v1/employees/${employeeId}`);
-        
+
         // Assert
         const expectedEmployee = { 
             id: 1,
@@ -82,13 +82,13 @@ describe("GET /employees/:id endpoint", () => {
     });
 
     it("Should return an error when id does not exist.", async () => {
-        
+
         // Arrange 
         const employeeId: number = 100;
-        
+
         //  Act
         const res: Response = await request(app).get(`/api/v1/employees/${employeeId}`);
-        
+
         // Assert
         expect(res.status).toBe(HTTP_STATUS.NOT_FOUND);
     });
@@ -96,7 +96,7 @@ describe("GET /employees/:id endpoint", () => {
 
 describe("PUT /api/v1/employees/:id endpoint", () => {
     it("Should return an updated employee.", async () => {
-        
+
         // Arrange
         const employeeId: number = 1;
         const updatedEmployee: Partial<Employee> = {
@@ -110,13 +110,13 @@ describe("PUT /api/v1/employees/:id endpoint", () => {
     });
 
     it("Should return an error when employee not found.", async () => {
-    
+
         // Arrange 
         const employeeId: number = 100;
-        
+
         // Act
         const res: Response = await request(app).get(`/api/v1/employees/${employeeId}`);
-        
+
         // Assert
         expect(res.status).toBe(HTTP_STATUS.NOT_FOUND);
     });
@@ -134,16 +134,15 @@ describe("PUT /api/v1/employees/:id endpoint", () => {
 
         // Assert
         expect(res.status).toBe(HTTP_STATUS.NOT_FOUND);
-
     });
 });
 
 describe("DELETE /api/v1/employees/:id", () => {
     it("Should successfully delete an employee.", async () => {
-        
+
         // Arrange
         const employeeId: number = 1;
-        
+
         // Act
         const res: Response = await request(app).delete(`/api/v1/employees/${employeeId}`);
 
@@ -196,12 +195,13 @@ describe("GET /api/v1/employees/branches/:branchId", () => {
             department: "Advisory"
         }
     ];
+
         expect(res.status).toBe(HTTP_STATUS.OK);
         expect(res.body.data).toMatchObject(expectedData);
     });
 
     it("Should return an error when using an invalid branchId", async () => {
-        
+
         // Arrange
         const branchId: number = 100;
 
@@ -248,12 +248,12 @@ describe("GET api/v1/employees/departments/:department", () => {
             "name": "Amber Roberts",
             "department": "Customer Service"
         }
-    ]
+    ];
 
         expect(res.status).toBe(HTTP_STATUS.OK);
         expect(res.body.data).toMatchObject(expectedData);
     });
-    
+
     it("Should return an error when using an invalid department", async () => {
         // Act
         const department: string = "FakeDepartment";
@@ -263,6 +263,5 @@ describe("GET api/v1/employees/departments/:department", () => {
 
         // Assert
         expect(res.status).toBe(HTTP_STATUS.NOT_FOUND);
-
     });
 });

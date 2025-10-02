@@ -50,10 +50,10 @@ export const updateEmployee = async (
         throw new Error("Employee not found.");
     }
     // Allowed fields
-    const allowedFields = ["position", "department", "email", "phoneNumber", "branchId"];
+    const allowedFields: string[] = ["position", "department", "email", "phoneNumber", "branchId"];
 
     // Compare incoming fields with allowed fields 
-    const invalidFields: String[] = Object.keys(employeeData).filter(key => !allowedFields.includes(key));
+    const invalidFields: string[] = Object.keys(employeeData).filter(key => !allowedFields.includes(key));
     if (invalidFields.length > 0) {
         throw new Error(`Invalid field(s) provided: ${invalidFields.join(", ")}`);
     }
@@ -91,7 +91,7 @@ export const getEmployeesByBranch = async (branchId: number): Promise<MatchingBr
             
             const { branchId, name, department} = employee;
 
-            matchingBranches.push({branchId,name, department})
+            matchingBranches.push({branchId, name, department})
         }
     }
 

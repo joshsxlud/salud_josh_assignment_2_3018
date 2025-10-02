@@ -8,7 +8,7 @@ export const getAllBranches = async (req: Request, res: Response, next: NextFunc
     try{
         const branches: Branch[] = await branchService.getAllBranches();
         res.status(HTTP_STATUS.OK).json({message: "Get all branches", data: branches});
-        
+
     } catch (error) {
         res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Failed to retrieve branches."});
         next(error);
@@ -21,7 +21,6 @@ export const makeBranch = async (req: Request, res: Response, next: NextFunction
         const branchData: Omit<Branch, "id"> = req.body;
 
         // Validate inputs
-
         if (!branchData.name) {
             res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Name is required."});
         }
@@ -35,6 +34,7 @@ export const makeBranch = async (req: Request, res: Response, next: NextFunction
         }
 
         const newBranch: Branch = await branchService.makeBranch(branchData);
+
         res.status(HTTP_STATUS.CREATED).json({message: "Branch has been created.", data: newBranch});
     } catch (error) {
         res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Failed to create a branch."});
@@ -44,8 +44,9 @@ export const makeBranch = async (req: Request, res: Response, next: NextFunction
 
 export const getBranchById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const id = parseInt(req.params.id);
+        const id: number = parseInt(req.params.id);
         const branch: Branch = await branchService.getBranchById(id);
+
         res.status(HTTP_STATUS.OK).json({message: "Branch Found", data: branch});
     }
     catch (error) {
@@ -56,10 +57,10 @@ export const getBranchById = async (req: Request, res: Response, next: NextFunct
 
 export const updateBranch = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const id = parseInt(req.params.id);
+        const id: number = parseInt(req.params.id);
         const branchData: Pick<Branch, "address" | "phoneNumber"> = req.body;
 
-        const updatedBranch = await branchService.updateBranch(id, branchData);
+        const updatedBranch: Branch = await branchService.updateBranch(id, branchData);
 
         res.status(HTTP_STATUS.OK).json({message: "Branch information updated.", data: updatedBranch});
     } catch (error) {
@@ -70,7 +71,7 @@ export const updateBranch = async (req: Request, res: Response, next: NextFuncti
 
 export const deleteBranch = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const id= parseInt(req.params.id);
+        const id: number = parseInt(req.params.id);
         const deletedBranch: Branch = await branchService.deleteBranch(id);
 
         res.status(HTTP_STATUS.OK).json({message: "Branch Deleted.", data: deletedBranch});

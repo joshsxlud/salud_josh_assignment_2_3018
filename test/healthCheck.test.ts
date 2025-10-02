@@ -1,11 +1,11 @@
-import request from "supertest";
+import request, { Response } from "supertest";
 import app from "../src/app";
 
 describe("GET /api/v1/health", () => {
     it("Returns a 200 status code and required fields", async () => {
 
         // Act
-        const res = await request(app).get("/api/v1/health");
+        const res: Response = await request(app).get("/api/v1/health");
 
         // Assert
         expect(res.status).toBe(200);

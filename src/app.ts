@@ -20,5 +20,4 @@ app.get("/api/v1/health", (req, res) => {
 app.use("/api/v1", employeeRoutes);
 app.use("/api/v1", branchRoutes);
 
-
 export default app;

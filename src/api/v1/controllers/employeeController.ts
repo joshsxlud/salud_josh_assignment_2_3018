@@ -44,10 +44,11 @@ export const createEmployee = async (req: Request, res: Response, next: NextFunc
         if (!employeeData.branchId) {
             res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Branch Id is required."});
         }
+
         // TODO: Destructure later 
-        const newEmployee = await employeeService.makeEmployee(employeeData);
+        const newEmployee: Employee = await employeeService.makeEmployee(employeeData);
         res.status(HTTP_STATUS.CREATED).json({message: "Employee has been created.", data: newEmployee});
-        
+
     } catch (error) {
         res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Failed to create an employee."});
         next(error);
@@ -56,7 +57,7 @@ export const createEmployee = async (req: Request, res: Response, next: NextFunc
 
 export const getEmployeeById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const id = parseInt(req.params.id);
+        const id: number = parseInt(req.params.id);
         const employee: Employee = await employeeService.getEmployeeById(id);
         res.status(HTTP_STATUS.OK).json({message: "Employee Found", data: employee});
     }
@@ -68,10 +69,10 @@ export const getEmployeeById = async (req: Request, res: Response, next: NextFun
 
 export const updateEmployee = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const id = parseInt(req.params.id);
+        const id: number = parseInt(req.params.id);
         const employeeData: Pick<Employee, "position" | "branchId" | "department" | "email" | "phoneNumber"> = req.body;
 
-        const updatedEmployee = await employeeService.updateEmployee(id, employeeData);
+        const updatedEmployee: Employee = await employeeService.updateEmployee(id, employeeData);
 
         res.status(HTTP_STATUS.OK).json({message: "Employee information updated.", data: updatedEmployee});
     } catch (error) {
@@ -82,7 +83,7 @@ export const updateEmployee = async (req: Request, res: Response, next: NextFunc
 
 export const deleteEmployee = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const id = parseInt(req.params.id);
+        const id: number = parseInt(req.params.id);
         const deletedEmployee: Employee = await employeeService.deleteEmployee(id);
 
         res.status(HTTP_STATUS.OK).json({message: "Employee Deleted.", data: deletedEmployee});
@@ -94,10 +95,10 @@ export const deleteEmployee = async (req: Request, res: Response, next: NextFunc
 
 export const getEmployeesByBranch = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try{
-        const branchId = parseInt(req.params.branchId);
-        let matchingBranches: MatchingBranches[] = await employeeService.getEmployeesByBranch(branchId);
+        const branchId: number = parseInt(req.params.branchId);
+        const matchingBranches: MatchingBranches[] = await employeeService.getEmployeesByBranch(branchId);
         res.status(HTTP_STATUS.OK).json({message: `Employees belonging to branch ${branchId}`, data: matchingBranches});
-        
+
     } catch (error) {
         res.status(HTTP_STATUS.NOT_FOUND).json({message: String(error)});
         next(error);
@@ -106,8 +107,8 @@ export const getEmployeesByBranch = async (req: Request, res: Response, next: Ne
 
 export const getEmployeesByDepartment = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try{
-        const department = req.params.department;
-        let MatchingDepartments: MatchingDepartment[] = await employeeService.getEmployeesByDepartment(department);
+        const department: string = req.params.department;
+        const MatchingDepartments: MatchingDepartment[] = await employeeService.getEmployeesByDepartment(department);
         res.status(HTTP_STATUS.OK).json({message: `Employees belonging to ${department}`, data: MatchingDepartments});
         
     } catch (error) {

@@ -72,7 +72,7 @@ describe("GET /branches/:id", () => {
     });
 
     it("Should return an error when branch id does not exist.", async () => {
-        
+
         // Arrange
         const branchId: number = 100;
 
@@ -100,7 +100,7 @@ describe("PUT /api/v1/branches/:id endpoint", () => {
     });
 
     it("Should return an error when employee not found.", async () => {
-        
+
         // Arrange
         const branchId: number = 100;
 
@@ -110,6 +110,7 @@ describe("PUT /api/v1/branches/:id endpoint", () => {
         // Assert
         expect(res.status).toBe(HTTP_STATUS.NOT_FOUND);
     });
+
     it("Should return an error when trying to update incorrect fields.", async () => {
 
         // Arrange
@@ -129,10 +130,10 @@ describe("PUT /api/v1/branches/:id endpoint", () => {
 
 describe("DELETE /api/v1/branches/:id", () => {
     it("Should successfully delete a branch.", async () => {
-        
+
         // Arrange
         const branchId: number = 1;
-        
+
         // Act
         const res: Response = await request(app).delete(`/api/v1/branches/${branchId}`);
 

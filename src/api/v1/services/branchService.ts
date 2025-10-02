@@ -46,8 +46,9 @@ export const updateBranch = async (
     if (index === -1) {
         throw new Error("Branch not found.");
     }
+
     // Allowed fields
-    const allowedFields = ["phoneNumber", "address"];
+    const allowedFields: string[] = ["phoneNumber", "address"];
 
     // Compare incoming fields with allowed fields 
     const invalidFields: String[] = Object.keys(branchData).filter(key => !allowedFields.includes(key));
