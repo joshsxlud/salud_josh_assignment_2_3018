@@ -18,8 +18,22 @@ export const getAllBranches = async (): Promise<Branch[]> => {
  */
 export const makeBranch = async (branchData: Omit<Branch, "id">
 ): Promise<Branch> => {
+
+    let newId: number = 1;
+
+    // Find branch ids and sort
+    const branchIds: number[] = branches.map(branch => branch.id).sort((a, b) => a - b);
+
+    // Generate new id
+    for (const id of branchIds) {
+        if (id !== newId) {
+            break; 
+        }
+        newId = id + 1;
+    }
+
     const newBranch: Branch = {
-        id: branches.length + 1,
+        id: newId,
         name: branchData.name,
         address: branchData.address,
         phoneNumber: branchData.phoneNumber
