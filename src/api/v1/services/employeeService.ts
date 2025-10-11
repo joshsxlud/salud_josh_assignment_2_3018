@@ -19,8 +19,21 @@ export const getAllEmployees = async (): Promise<Employee[]> => {
  */
 export const makeEmployee = async (employeeData: Omit<Employee, "id">
 ): Promise<Employee> => {
+    let newId: number = 1;
+
+    // Find employee ids and sort
+    const employeeIds: number[] = employees.map(employee => employee.id).sort((a, b) => a - b);
+
+    // Generate new id
+    for (const id of employeeIds) {
+        if (id !== newId) {
+            break; 
+        }
+        newId = id + 1;
+    }
+
     const newEmployee: Employee = {
-        id: employees.length + 1,
+        id: newId,
         name: employeeData.name,
         position: employeeData.position,
         department: employeeData.department,
