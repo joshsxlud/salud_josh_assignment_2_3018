@@ -1,4 +1,5 @@
-import { employees, Employee, MatchingBranches, MatchingDepartment } from "../../../data/employees";
+import { employees, MatchingBranches, MatchingDepartment } from "../../../data/employees";
+import { Employee } from "../models/employeeModel";
 
 /**
  * A service to retrieve all employees.

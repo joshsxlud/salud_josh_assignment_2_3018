@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import * as employeeService from "../services/employeeService";
-import { Employee, MatchingBranches, MatchingDepartment } from "src/data/employees";
+import { MatchingBranches, MatchingDepartment } from "src/data/employees";
 import { HTTP_STATUS } from "../../constants/httpConstants";
+import Employee  from "../models/employeeModel";
 
 /**
  * Controller to retrieve all employees.
