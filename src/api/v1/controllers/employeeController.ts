@@ -5,7 +5,7 @@ import { HTTP_STATUS } from "../../constants/httpConstants";
 import { Employee }  from "../models/employeeModel";
 // import Joi from "joi";
 
-import { createEmployeeSchema } from "../validation/employeeSchemas";
+// import { createEmployeeSchema } from "../validation/employeeSchemas";
 
 /**
  * Controller to retrieve all employees.
@@ -52,11 +52,11 @@ export const createEmployee = async (req: Request, res: Response, next: NextFunc
             } = req.body;
 
         // Validate inputs using joi
-        const { error } = createEmployeeSchema.validate(req.body, { abortEarly: false });
+        // const { error } = createEmployeeSchema.validate(req.body, { abortEarly: false });
 
-        if (error) {
-            res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Validation failed.", details: error.details.map(d => d.message)});
-        }
+        // if (error) {
+        //     res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Validation failed.", details: error.details.map(d => d.message)});
+        // }
         
         const employeeData: {
             name: string;
