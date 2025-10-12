@@ -8,5 +8,3 @@ export interface Employee {
   phoneNumber: number;
   branchId: number;
 }
-
-export default Employee;
