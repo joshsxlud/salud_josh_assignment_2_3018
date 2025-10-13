@@ -40,8 +40,12 @@ export const validationMiddleware =  async (req: Request, res: Response, next: N
 
     // BRANCH VALIDATION
 
-    if (req.path === "/api/v1/branches" && reqMethod === "POST") {
+    if (reqPath === "/api/v1/branches" && reqMethod === "POST") {
         reqSchema = branchValidators.createBranchSchema;
+    }
+
+    if (reqPath.startsWith("/api/v1/branches") && reqMethod === "PUT") {
+        reqSchema = branchValidators.updateBranchSchema;
     }
 
     if (!reqSchema) {             // DELETE LATER

@@ -10,7 +10,8 @@ const branchKeys: string[] = Object.keys(branchSchema.describe().keys);
 
 export const createBranchSchema: Joi.ObjectSchema = branchSchema
     .keys({
-        phoneNumber: Joi.number().min(1000000000).max(9999999999)  // FIX THIS
+        // Ensure phone numbers are no less than or greater than 10 digits
+        phoneNumber: Joi.number().min(1000000000).max(9999999999)
     })
     .fork(branchKeys, key => key.required())
     .unknown(false);
