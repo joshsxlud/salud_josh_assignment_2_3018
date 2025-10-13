@@ -1,10 +1,10 @@
 import Joi from "joi";
 
-const employeeSchema: Joi.ObjectSchema = Joi.object().keys({
-    name: Joi.string(),
-    position: Joi.string(),
-    department: Joi.string(),
-    email: Joi.string(),
+const employeeSchema: Joi.ObjectSchema = Joi.object({
+    name: Joi.string().trim(),
+    position: Joi.string().trim(),
+    department: Joi.string().trim(),
+    email: Joi.string().trim(),
     phoneNumber: Joi.number(),
     branchId: Joi.number()
 });
@@ -18,6 +18,10 @@ export const createEmployeeSchema: Joi.ObjectSchema = employeeSchema
         email: Joi.string().email({tlds: {allow: ["com"]}})
     });
 
-export const updateEmployeeSchema: Joi.ObjectSchema = employeeSchema
+export const updateEmployeeSchema: Joi.ObjectSchema= employeeSchema
     .fork(["position", "department", "email", "phoneNumber", "branchId"], key => key.optional())
     .unknown(false);
+
+export const deleteEmployeeSchema: Joi.ObjectSchema = Joi.object({
+    id: Joi.number().required()
+});
