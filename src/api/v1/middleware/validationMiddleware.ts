@@ -48,6 +48,20 @@ export const validationMiddleware =  async (req: Request, res: Response, next: N
         reqSchema = branchValidators.updateBranchSchema;
     }
 
+    // Delete Employees
+    if (req.path.startsWith("/api/v1/branches/") && reqMethod === "DELETE") {
+        reqSchema = branchValidators.deleteBranchSchema;
+
+        const { error, value } = reqSchema.validate(req.params);
+
+        req.body = value;
+
+        if (error) {
+            res.status(HTTP_STATUS.BAD_REQUEST).json({message: error.message});
+            next(error);
+        }
+    }
+
     if (!reqSchema) {             // DELETE LATER
         console.log(reqSchema);   // FOR DEBUG PURPOSES
         return next();            // :)
