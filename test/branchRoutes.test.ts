@@ -1,7 +1,7 @@
 import request, { Response } from "supertest";
 import app from "../src/app"
 import { HTTP_STATUS } from "../src/api/constants/httpConstants";
-import { Branch } from "../src/data/branches";
+import { Branch } from "../src/api/v1/models/branchModel";
 
 describe("GET /branches endpoint", () => {
     it("Should return all employees.", async () => {
@@ -123,7 +123,7 @@ describe("PUT /api/v1/branches/:id endpoint", () => {
         const res: Response = await request(app).put(`/api/v1/branches/${branchId}`).send(invalidUpdate);
 
         // Assert
-        expect(res.status).toBe(HTTP_STATUS.NOT_FOUND);
+        expect(res.status).toBe(HTTP_STATUS.BAD_REQUEST);
 
     });
 });

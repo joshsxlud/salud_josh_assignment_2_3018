@@ -8,7 +8,7 @@ export const validationMiddleware =  async (req: Request, res: Response, next: N
     const reqPath: string = req.path;
     const reqMethod: string = req.method;
 
-    console.log(req.path, req.method)
+    // console.log(req.path, req.method)
 
     let reqSchema: Joi.ObjectSchema | undefined;
 
@@ -68,11 +68,11 @@ export const validationMiddleware =  async (req: Request, res: Response, next: N
     }
 
     if (!reqSchema) {             // DELETE LATER
-        console.log(reqSchema);   // FOR DEBUG PURPOSES
+        // console.log(reqSchema);   // FOR DEBUG PURPOSES
         return next();            // :)
     }
 
-    console.log(reqSchema);
+    // console.log(reqSchema);
 
     const { error, value } = reqSchema.validate(req.body);
 
