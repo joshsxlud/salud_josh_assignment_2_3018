@@ -28,38 +28,43 @@ export const validationMiddleware =  async (req: Request, res: Response, next: N
     if (req.path.startsWith("/api/v1/employees/") && reqMethod === "DELETE") {
         reqSchema = employeeValidators.deleteEmployeeSchema;
 
-        const { error, value } = reqSchema.validate(req.params);
+        const { error, value } = reqSchema.validate(req.params.id);
 
-        req.body = value;
+        req.params.id = value;
 
         if (error) {
             res.status(HTTP_STATUS.BAD_REQUEST).json({message: error.message});
             next(error);
         }
+
+        next();
     }
 
     // BRANCH VALIDATION
 
+    // Create branches
     if (reqPath === "/api/v1/branches" && reqMethod === "POST") {
         reqSchema = branchValidators.createBranchSchema;
     }
 
+    // Update branches
     if (reqPath.startsWith("/api/v1/branches") && reqMethod === "PUT") {
         reqSchema = branchValidators.updateBranchSchema;
     }
 
-    // Delete Employees
+    // Delete branches
     if (req.path.startsWith("/api/v1/branches/") && reqMethod === "DELETE") {
         reqSchema = branchValidators.deleteBranchSchema;
 
-        const { error, value } = reqSchema.validate(req.params);
+        const { error, value } = reqSchema.validate(req.params.id);
 
-        req.body = value;
-
+        req.params.id = value;
+ 
         if (error) {
             res.status(HTTP_STATUS.BAD_REQUEST).json({message: error.message});
             next(error);
         }
+        next();
     }
 
     if (!reqSchema) {             // DELETE LATER

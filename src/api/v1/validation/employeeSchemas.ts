@@ -27,5 +27,5 @@ export const updateEmployeeSchema: Joi.ObjectSchema = employeeSchema
     .unknown(false);
 
 export const deleteEmployeeSchema: Joi.ObjectSchema = Joi.object({
-    id: Joi.number().required()
+    id: Joi.string().required()
 });
