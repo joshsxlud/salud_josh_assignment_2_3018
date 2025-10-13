@@ -12,13 +12,17 @@ const employeeSchema: Joi.ObjectSchema = Joi.object({
 const employeeKeys: string[] = Object.keys(employeeSchema.describe().keys);
 
 export const createEmployeeSchema: Joi.ObjectSchema = employeeSchema
-    .fork(employeeKeys, key => key.required())
     .keys({
         email: Joi.string().email({tlds: {allow: ["com"]}})
     })
+    .fork(employeeKeys, key => key.required())
     .unknown(false);
 
-export const updateEmployeeSchema: Joi.ObjectSchema= employeeSchema
+export const updateEmployeeSchema: Joi.ObjectSchema = employeeSchema
+    .keys({
+        id: Joi.number().forbidden(),
+        name: Joi.string().forbidden()
+    })
     .fork(["position", "department", "email", "phoneNumber", "branchId"], key => key.optional())
     .unknown(false);
 

@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import * as branchService from "../services/branchService";
 import { Branch } from "../models/branchModel";
 import { HTTP_STATUS } from "../../constants/httpConstants";
-import { createBranchValidator } from "../validation/branchSchemas";
+import { createBranchSchema } from "../validation/branchSchemas";
 
 /**
  * Controller to retrieve all branches.
@@ -42,7 +42,7 @@ export const makeBranch = async (req: Request, res: Response, next: NextFunction
             phoneNumber: number;
         } = req.body;
 
-        const { error } = createBranchValidator.validate(req.body, { abortEarly: false });
+        const { error } = createBranchSchema.validate(req.body, { abortEarly: false });
         
         if (error) {
             res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Validation failed.", details: error.details.map(d => d.message)});

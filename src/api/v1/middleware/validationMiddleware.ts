@@ -1,4 +1,5 @@
-import { createEmployeeSchema, updateEmployeeSchema, deleteEmployeeSchema } from "../validation/employeeSchemas";
+import * as employeeValidators from "../validation/employeeSchemas";
+import * as branchValidators from "../validation/branchSchemas"
 import { Request, Response, NextFunction } from "express";
 import Joi from "joi";
 import { HTTP_STATUS } from "../../constants/httpConstants";
@@ -11,19 +12,21 @@ export const validationMiddleware =  async (req: Request, res: Response, next: N
 
     let reqSchema: Joi.ObjectSchema | undefined;
 
+    // EMPLOYEE VALIDATION
+
     // Create employees
     if (reqPath === "/api/v1/employees" && reqMethod === "POST" ) {
-        reqSchema = createEmployeeSchema;
+        reqSchema = employeeValidators.createEmployeeSchema;
     }
 
     // Update employees
     if (reqPath.startsWith("/api/v1/employees/") && reqMethod === "PUT") {
-        reqSchema = updateEmployeeSchema;
+        reqSchema = employeeValidators.updateEmployeeSchema;
     }
 
     // Delete Employees
     if (req.path.startsWith("/api/v1/employees/") && reqMethod === "DELETE") {
-        reqSchema = deleteEmployeeSchema;
+        reqSchema = employeeValidators.deleteEmployeeSchema;
 
         const { error, value } = reqSchema.validate(req.params);
 
@@ -33,6 +36,12 @@ export const validationMiddleware =  async (req: Request, res: Response, next: N
             res.status(HTTP_STATUS.BAD_REQUEST).json({message: error.message});
             next(error);
         }
+    }
+
+    // BRANCH VALIDATION
+
+    if (req.path === "/api/v1/branches" && reqMethod === "POST") {
+        reqSchema = branchValidators.createBranchSchema;
     }
 
     if (!reqSchema) {             // DELETE LATER
@@ -47,7 +56,7 @@ export const validationMiddleware =  async (req: Request, res: Response, next: N
 
     if (error) {
         res.status(HTTP_STATUS.BAD_REQUEST).json({message: error.message})
-        return next(error);
+        next(error);
     }
 
     req.body = value;

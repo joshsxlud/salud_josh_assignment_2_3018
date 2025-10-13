@@ -9,8 +9,16 @@ export const branchSchema: Joi.ObjectSchema = Joi.object({
 const branchKeys: string[] = Object.keys(branchSchema.describe().keys);
 
 export const createBranchSchema: Joi.ObjectSchema = branchSchema
-    .fork(branchKeys, key => key.required())
     .keys({
-        phoneNumber: Joi.number().min(1000000000).max(9999999999)
+        phoneNumber: Joi.number().min(1000000000).max(9999999999)  // FIX THIS
     })
+    .fork(branchKeys, key => key.required())
+    .unknown(false);
+
+export const updateBranchSchema: Joi.ObjectSchema = branchSchema
+    .keys({
+        id: Joi.number().forbidden(),
+        name: Joi.string().forbidden()
+    })
+    .fork(["address", "phoneNumber"], key => key.optional())
     .unknown(false);
