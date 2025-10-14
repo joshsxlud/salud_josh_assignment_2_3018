@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import * as employeeService from "../services/employeeService";
-import { Employee, MatchingBranches, MatchingDepartment } from "src/data/employees";
+import { MatchingBranches, MatchingDepartment } from "src/data/employees";
 import { HTTP_STATUS } from "../../constants/httpConstants";
+import { Employee }  from "../models/employeeModel";
 
 /**
  * Controller to retrieve all employees.
@@ -47,31 +48,13 @@ export const createEmployee = async (req: Request, res: Response, next: NextFunc
                 branchId: number;
             } = req.body;
 
-        // Validate inputs
-        if (!name) {
-            res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Name is required."});
-        }
+        // Validate inputs using joi
+        // const { error } = createEmployeeSchema.validate(req.body, { abortEarly: false });
 
-        if (!position) {
-            res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Position is required."});
-        }
-
-        if (!department) {
-            res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Department is required."});
-        }
-
-        if (!email) {
-            res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Email is required."});
-        }
-
-        if (!phoneNumber) {
-            res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Phone number is required."});
-        }
-
-        if (!branchId) {
-            res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Branch Id is required."});
-        }
-
+        // if (error) {
+        //     res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Validation failed.", details: error.details.map(d => d.message)});
+        // }
+        
         const employeeData: {
             name: string;
             position: string;

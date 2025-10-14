@@ -1,7 +1,8 @@
 import request, { Response } from "supertest";
 import app from "../src/app"
 import { HTTP_STATUS } from "../src/api/constants/httpConstants";
-import { Employee, MatchingBranches, MatchingDepartment } from "../src/data/employees";
+import { MatchingBranches, MatchingDepartment } from "../src/data/employees";
+import { Employee } from "../src/api/v1/models/employeeModel";
 
 describe("GET /employees endpoint", () => {
     it("Should return all employees.", async () => {
@@ -25,7 +26,7 @@ describe("POST /employees endpoint", () => {
             name: "Test Employee",
             position: "Test Position",
             department: "Test Department",
-            email: "Testemail@test.test",
+            email: "Testemail@test.com",
             phoneNumber: 2041231231,
             branchId: 123
         };
@@ -45,7 +46,7 @@ describe("POST /employees endpoint", () => {
             name: "Test Employee",
             position: "Test Position",
             department: "Test Department",
-            email: "Testemail@test.test",
+            email: "Testemail@test.com",
             phoneNumber: 2041231231
         };
 
@@ -133,7 +134,7 @@ describe("PUT /api/v1/employees/:id endpoint", () => {
         const res: Response = await request(app).put(`/api/v1/employees/${employeeId}`).send(invalidUpdate);
 
         // Assert
-        expect(res.status).toBe(HTTP_STATUS.NOT_FOUND);
+        expect(res.status).toBe(HTTP_STATUS.BAD_REQUEST);
     });
 });
 

@@ -1,4 +1,5 @@
-import { employees, Employee, MatchingBranches, MatchingDepartment } from "../../../data/employees";
+import { employees, MatchingBranches, MatchingDepartment } from "../../../data/employees";
+import { Employee } from "../models/employeeModel"
 
 /**
  * A service to retrieve all employees.
@@ -89,14 +90,14 @@ export const updateEmployee = async (
     if (index === -1) {
         throw new Error("Employee not found.");
     }
-    // Allowed fields
-    const allowedFields: string[] = ["position", "department", "email", "phoneNumber", "branchId"];
+    // // Allowed fields
+    // const allowedFields: string[] = ["position", "department", "email", "phoneNumber", "branchId"];
 
-    // Compare incoming fields with allowed fields 
-    const invalidFields: string[] = Object.keys(employeeData).filter(key => !allowedFields.includes(key));
-    if (invalidFields.length > 0) {
-        throw new Error(`Invalid field(s) provided: ${invalidFields.join(", ")}`);
-    }
+    // // Compare incoming fields with allowed fields 
+    // const invalidFields: string[] = Object.keys(employeeData).filter(key => !allowedFields.includes(key));
+    // if (invalidFields.length > 0) {
+    //     throw new Error(`Invalid field(s) provided: ${invalidFields.join(", ")}`);
+    // }
 
     const updatedEmployee: Employee = {
         ...employees[index],

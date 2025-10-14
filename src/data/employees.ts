@@ -1,13 +1,4 @@
-// An interface representing an employee
-export interface Employee {
-  id: number;
-  name: string;
-  position: string;
-  department: string;
-  email: string;
-  phoneNumber: number;
-  branchId: number;
-}
+import { Employee } from "../api/v1/models/employeeModel";
 
 // An interface representing employees with similar branchIds
 export interface MatchingBranches {
