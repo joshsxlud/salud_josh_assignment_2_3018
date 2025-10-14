@@ -24,22 +24,6 @@ export const validationMiddleware =  async (req: Request, res: Response, next: N
         reqSchema = employeeValidators.updateEmployeeSchema;
     }
 
-    // Delete Employees
-    if (req.path.startsWith("/api/v1/employees/") && reqMethod === "DELETE") {
-        reqSchema = employeeValidators.deleteEmployeeSchema;
-
-        const { error, value } = reqSchema.validate(req.params.id);
-
-        req.params.id = value;
-
-        if (error) {
-            res.status(HTTP_STATUS.BAD_REQUEST).json({message: error.message});
-            next(error);
-        }
-
-        next();
-    }
-
     // BRANCH VALIDATION
 
     // Create branches
@@ -48,28 +32,14 @@ export const validationMiddleware =  async (req: Request, res: Response, next: N
     }
 
     // Update branches
-    if (reqPath.startsWith("/api/v1/branches") && reqMethod === "PUT") {
+    if (reqPath.startsWith("/api/v1/branches/") && reqMethod === "PUT") {
         reqSchema = branchValidators.updateBranchSchema;
     }
 
-    // Delete branches
-    if (req.path.startsWith("/api/v1/branches/") && reqMethod === "DELETE") {
-        reqSchema = branchValidators.deleteBranchSchema;
-
-        const { error, value } = reqSchema.validate(req.params.id);
-
-        req.params.id = value;
- 
-        if (error) {
-            res.status(HTTP_STATUS.BAD_REQUEST).json({message: error.message});
-            next(error);
-        }
-        next();
-    }
 
     if (!reqSchema) {             // DELETE LATER
-        // console.log(reqSchema);   // FOR DEBUG PURPOSES
-        return next();            // :)
+        console.log(reqSchema);   // FOR DEBUG PURPOSES
+        return next();
     }
 
     // console.log(reqSchema);

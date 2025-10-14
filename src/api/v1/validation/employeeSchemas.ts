@@ -25,7 +25,3 @@ export const updateEmployeeSchema: Joi.ObjectSchema = employeeSchema
     })
     .fork(["position", "department", "email", "phoneNumber", "branchId"], key => key.optional())
     .unknown(false);
-
-export const deleteEmployeeSchema: Joi.ObjectSchema = Joi.object({
-    id: Joi.string().required()
-});

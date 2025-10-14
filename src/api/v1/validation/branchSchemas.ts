@@ -23,7 +23,3 @@ export const updateBranchSchema: Joi.ObjectSchema = branchSchema
     })
     .fork(["address", "phoneNumber"], key => key.optional())
     .unknown(false);
-
-export const deleteBranchSchema: Joi.ObjectSchema = Joi.object({
-    id: Joi.number().required()
-});
