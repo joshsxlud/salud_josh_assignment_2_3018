@@ -3,9 +3,6 @@ import * as employeeService from "../services/employeeService";
 import { MatchingBranches, MatchingDepartment } from "src/data/employees";
 import { HTTP_STATUS } from "../../constants/httpConstants";
 import { Employee }  from "../models/employeeModel";
-// import Joi from "joi";
-
-// import { createEmployeeSchema } from "../validation/employeeSchemas";
 
 /**
  * Controller to retrieve all employees.

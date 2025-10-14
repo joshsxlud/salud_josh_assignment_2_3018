@@ -35,14 +35,14 @@ export const validationMiddleware =  async (req: Request, res: Response, next: N
     }
 
     if (!reqSchema) {
-        console.log(reqSchema);  
-        return next();
+        next();
+        return;
     }
 
     const { error, value } = reqSchema.validate(req.body);
 
     if (error) {
-        res.status(HTTP_STATUS.BAD_REQUEST).json({message: error.message})
+        res.status(HTTP_STATUS.BAD_REQUEST).json({message: error.message});
         next(error);
     }
 
