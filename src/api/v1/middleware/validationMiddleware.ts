@@ -8,8 +8,6 @@ export const validationMiddleware =  async (req: Request, res: Response, next: N
     const reqPath: string = req.path;
     const reqMethod: string = req.method;
 
-    // console.log(req.path, req.method)
-
     let reqSchema: Joi.ObjectSchema | undefined;
 
     // EMPLOYEE VALIDATION
@@ -36,16 +34,12 @@ export const validationMiddleware =  async (req: Request, res: Response, next: N
         reqSchema = branchValidators.updateBranchSchema;
     }
 
-
-    if (!reqSchema) {             // DELETE LATER
-        console.log(reqSchema);   // FOR DEBUG PURPOSES
+    if (!reqSchema) {
+        console.log(reqSchema);  
         return next();
     }
 
-    // console.log(reqSchema);
-
     const { error, value } = reqSchema.validate(req.body);
-
 
     if (error) {
         res.status(HTTP_STATUS.BAD_REQUEST).json({message: error.message})
