@@ -42,30 +42,6 @@ export const getAllEmployees = async (): Promise<Employee[]> => {
  */
 export const makeEmployee = async (employeeData: Omit<Employee, "id">
 ): Promise<Employee> => {
-
-    // // Find employee ids and sort
-    // const employeeIds: number[] = employees.map(employee => employee.id).sort((a, b) => a - b);
-
-    // // Generate new id
-    // for (const id of employeeIds) {
-    //     if (id !== newId) {
-    //         break; 
-    //     }
-    //     newId = id + 1;
-    // }
-
-    // const newEmployee: Employee = {
-    //     id: newId,
-    //     name: employeeData.name,
-    //     position: employeeData.position,
-    //     department: employeeData.department,
-    //     email: employeeData.email,
-    //     phoneNumber: employeeData.phoneNumber,
-    //     branchId: employeeData.branchId
-    // };
-
-    // employees.push(newEmployee);
-    // return newEmployee;
     try {
         const newEmployee: Partial<Employee> = {
             ...employeeData
@@ -86,21 +62,6 @@ export const makeEmployee = async (employeeData: Omit<Employee, "id">
  *            direct mutation.
  */
 export const getEmployeeById = async (id: string): Promise<Employee> => {
-    // let employeeById: Employee | undefined;
-
-    // for (const employee of employees) {
-    //     if (employee.id === id) {
-
-    //         employeeById = employee;
-    //         break;
-    //     }
-    // }
-
-    // if (!employeeById) {
-    //     throw new Error("Employee not found.");
-    // }
-
-    // return structuredClone(employeeById);
     try {
         const doc: DocumentSnapshot | null = await getDocumentById(
             "employees",
@@ -167,17 +128,6 @@ export const updateEmployee = async (
  * @returns - The deleted employee object.
  */
 export const deleteEmployee = async (id: string): Promise<void> => {
-
-    // const index: number = employees.findIndex((employee: Employee) => employee.id === id);
-
-    // if (index === -1) {
-    //     throw new Error("Employee not found.");
-    // }
-
-    // // Remove employee from the array
-    // const [deletedEmployee] = employees.splice(index, 1);
-
-    // return deletedEmployee;
     const employee: Employee = await getEmployeeById(id);
     try {
         if (!employee) {
