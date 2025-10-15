@@ -1,19 +1,5 @@
 import { Employee } from "../api/v1/models/employeeModel";
 
-// An interface representing employees with similar branchIds
-export interface MatchingBranches {
-  branchId: number;
-  name: string;
-  department: string;
-}
-
-// An interface representing employees with similar departments
-export interface MatchingDepartment {
-  name: string;
-  branchId: number;
-  department: string;
-}
-
 // An array of different employee objects
 export const employees: Employee[] = [
   { id: "1", name: "Alice Johnson", position: "Branch Manager", department: "Management", email: "alice.johnson@pixell-river.com", phoneNumber: 6045550148, branchId: 1 },

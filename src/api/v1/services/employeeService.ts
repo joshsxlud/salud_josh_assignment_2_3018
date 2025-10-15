@@ -3,8 +3,8 @@ import {
     DocumentData,
     DocumentSnapshot
  } from "firebase-admin/firestore";
-import { employees, MatchingBranches, MatchingDepartment } from "../../../data/employees";
-import { Employee } from "../models/employeeModel"
+import { employees} from "../../../data/employees";
+import { Employee, MatchingBranches, MatchingDepartment } from "../models/employeeModel"
 import { 
     createDocument,
     getDocuments,
@@ -147,23 +147,30 @@ export const deleteEmployee = async (id: string): Promise<void> => {
  * @returns - An array of employees that work at the same branch.
  */
 export const getEmployeesByBranch = async (branchId: number): Promise<MatchingBranches[]> => {
-    const matchingBranches: MatchingBranches[] = [];
+    try {
+        const snapshot: QuerySnapshot = await getDocuments("employees");
 
-    for (const employee of employees) {
-        if (employee.branchId === branchId) {
-            
-            const {branchId, name, department} = employee;
+        const matchingBranches: MatchingBranches[] = [];
 
-            matchingBranches.push({branchId, name, department})
+        snapshot.docs.forEach((doc) => {
+            const data: DocumentData = doc.data();
+            if (data.branchId === branchId) {
+                matchingBranches.push({
+                    branchId: data.branchId,
+                    name: data.name,
+                    department: data.department,
+                });
+            }
+        });
+
+        if (matchingBranches.length === 0) {
+            throw new Error("This branch has no employees.");
         }
-    }
 
-    // When branchId does not match any employees
-    if (matchingBranches.length === 0) {
-        throw new Error("This branch has no employees.");
+        return matchingBranches;
+    } catch (error: unknown) {
+        throw error;
     }
-
-    return matchingBranches;
 };
 
 /**

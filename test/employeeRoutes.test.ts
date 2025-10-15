@@ -1,8 +1,7 @@
 import request, { Response } from "supertest";
 import app from "../src/app"
 import { HTTP_STATUS } from "../src/api/constants/httpConstants";
-import { MatchingBranches, MatchingDepartment } from "../src/data/employees";
-import { Employee } from "../src/api/v1/models/employeeModel";
+import { Employee, MatchingBranches, MatchingDepartment } from "../src/api/v1/models/employeeModel";
 
 describe("GET /employees endpoint", () => {
     it("Should return all employees.", async () => {

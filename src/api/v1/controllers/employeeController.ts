@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import * as employeeService from "../services/employeeService";
-import { MatchingBranches, MatchingDepartment } from "src/data/employees";
 import { HTTP_STATUS } from "../../constants/httpConstants";
-import { Employee }  from "../models/employeeModel";
+import { Employee, MatchingBranches, MatchingDepartment  }  from "../models/employeeModel";
 import { successResponse, errorResponse } from "../models/responseModel";
 /**
  * Controller to retrieve all employees.
@@ -20,7 +19,6 @@ export const getAllEmployees = async (req: Request, res: Response, next: NextFun
         res.status(HTTP_STATUS.BAD_REQUEST).json(errorResponse("Could not retrieve employees.", "HTTP_STATUS.BAD_REQUEST"));
         next(error);
     }
-
 };
 
 /**
