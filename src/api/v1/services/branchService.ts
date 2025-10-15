@@ -112,7 +112,7 @@ export const updateBranch = async (
     
         return structuredClone(updatedBranch);
     } catch (error: unknown){
-        throw new Error ("Could not update employee.")
+        throw new Error ("Could not update branch.")
     }
 };
 

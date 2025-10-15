@@ -3,7 +3,6 @@ import {
     DocumentData,
     DocumentSnapshot
  } from "firebase-admin/firestore";
-import { employees} from "../../../data/employees";
 import { Employee, MatchingBranches, MatchingDepartment } from "../models/employeeModel"
 import { 
     createDocument,
@@ -180,21 +179,28 @@ export const getEmployeesByBranch = async (branchId: number): Promise<MatchingBr
  * @returns - An array of employees in the same department.
  */
 export const getEmployeesByDepartment = async (department: string): Promise<MatchingDepartment[]> => {
-    const MatchingDepartments: MatchingDepartment[] = [];
+    try {
+        const snapshot: QuerySnapshot = await getDocuments("employees");
 
-    for (const employee of employees) {
-        if (employee.department === department) {
-            
-            const { branchId, name, department} = employee;
+        const matchingDepartments: MatchingDepartment[] = [];
 
-            MatchingDepartments.push({branchId, name, department})
+        snapshot.docs.forEach((doc) => {
+            const data: DocumentData = doc.data();
+            if (data.department === department) {
+                matchingDepartments.push({
+                    branchId: data.branchId,
+                    name: data.name,
+                    department: data.department,
+                });
+            }
+        });
+
+        if (matchingDepartments.length === 0) {
+            throw new Error("This department has no employees.");
         }
-    }
 
-    // When the department does not match any employees
-    if (MatchingDepartments.length === 0) {
-        throw new Error("This department has no employees.");
+        return matchingDepartments;
+    } catch (error: unknown) {
+        throw error;
     }
-
-    return MatchingDepartments;
 };
