@@ -4,6 +4,13 @@ import { Request, Response, NextFunction } from "express";
 import Joi from "joi";
 import { HTTP_STATUS } from "../../constants/httpConstants";
 
+/**
+ * Middleware to validate incoming request data.
+ * 
+ * @param req - Express request object.
+ * @param res - Express response object.
+ * @param next - Passes control to the next middleware.
+ */
 export const validationMiddleware =  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const reqPath: string = req.path;
     const reqMethod: string = req.method;

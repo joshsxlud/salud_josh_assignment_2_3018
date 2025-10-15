@@ -120,7 +120,6 @@ export const updateBranch = async (
  * A service to delete an existing branch.
  * 
  * @param id - The id of the branch being deleted.
- * @returns - The deleted branch object.
  */
 export const deleteBranch = async (id: string): Promise<void> => {
     const branch: Branch = await getBranchById(id);

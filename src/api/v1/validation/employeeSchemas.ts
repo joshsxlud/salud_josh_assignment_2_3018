@@ -11,6 +11,7 @@ const employeeSchema: Joi.ObjectSchema = Joi.object({
 
 const employeeKeys: string[] = Object.keys(employeeSchema.describe().keys);
 
+// Validation schema for creating an employee.
 export const createEmployeeSchema: Joi.ObjectSchema = employeeSchema
     .keys({
         email: Joi.string().email({tlds: {allow: ["com"]}})
@@ -18,6 +19,8 @@ export const createEmployeeSchema: Joi.ObjectSchema = employeeSchema
     .fork(employeeKeys, key => key.required())
     .unknown(false);
 
+
+// Validation schema for updating an employee.
 export const updateEmployeeSchema: Joi.ObjectSchema = employeeSchema
     .keys({
         id: Joi.number().forbidden(),

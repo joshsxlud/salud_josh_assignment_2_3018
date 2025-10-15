@@ -124,7 +124,6 @@ export const updateEmployee = async (
  * A service to delete an employee. 
  * 
  * @param id - The id of the employee being deleted.
- * @returns - The deleted employee object.
  */
 export const deleteEmployee = async (id: string): Promise<void> => {
     const employee: Employee = await getEmployeeById(id);

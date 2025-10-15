@@ -1,5 +1,6 @@
 import Joi from "joi";
 
+// Base schema for a branch.
 export const branchSchema: Joi.ObjectSchema = Joi.object({
     name: Joi.string().trim(),
     address: Joi.string().trim(),
@@ -8,6 +9,7 @@ export const branchSchema: Joi.ObjectSchema = Joi.object({
 
 const branchKeys: string[] = Object.keys(branchSchema.describe().keys);
 
+// Validation schema for creating branches.
 export const createBranchSchema: Joi.ObjectSchema = branchSchema
     .keys({
         // Ensure phone numbers are no less than or greater than 10 digits
@@ -16,6 +18,7 @@ export const createBranchSchema: Joi.ObjectSchema = branchSchema
     .fork(branchKeys, key => key.required())
     .unknown(false);
 
+// Validation schema for updating branches.
 export const updateBranchSchema: Joi.ObjectSchema = branchSchema
     .keys({
         id: Joi.number().forbidden(),
