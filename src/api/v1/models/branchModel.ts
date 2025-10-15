@@ -1,6 +1,6 @@
 // An interface representing a branch
 export interface Branch {
-    id: number;
+    id?: string;
     name: string;
     address: string;
     phoneNumber: number;

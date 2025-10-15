@@ -101,7 +101,7 @@ export const getEmployeeById = async (id: string): Promise<Employee> => {
     // }
 
     // return structuredClone(employeeById);
-        try {
+    try {
         const doc: DocumentSnapshot | null = await getDocumentById(
             "employees",
             id
@@ -135,7 +135,6 @@ export const updateEmployee = async (
     id: string,
     employeeData: Pick<Employee, "position" | "department" | "email" | "phoneNumber" | "branchId">
 ): Promise<Employee> => {
-
     try {
         const employee: Employee = await getEmployeeById(id);
     
@@ -159,10 +158,6 @@ export const updateEmployee = async (
     } catch (error: unknown){
         throw new Error ("Could not update employee.")
     }
-
-
-
-    
 };
 
 /**
