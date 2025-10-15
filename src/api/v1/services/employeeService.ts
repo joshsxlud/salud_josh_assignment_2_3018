@@ -1,5 +1,10 @@
+import { 
+    QuerySnapshot,
+    DocumentData
+ } from "firebase-admin/firestore";
 import { employees, MatchingBranches, MatchingDepartment } from "../../../data/employees";
 import { Employee } from "../models/employeeModel"
+import { createDocument, getDocuments } from "../repositories/repositoryFunctions";
 
 /**
  * A service to retrieve all employees.
@@ -8,8 +13,19 @@ import { Employee } from "../models/employeeModel"
  *            direct mutation.
  */
 export const getAllEmployees = async (): Promise<Employee[]> => {
-    
-    return structuredClone(employees);
+    try {
+        const snapshot: QuerySnapshot = await getDocuments("employees");
+        const employees: Employee[] = snapshot.docs.map((doc) => {
+            const data: DocumentData = doc.data();
+            return {
+                id: doc.id,
+                ...data,
+            } as unknown as Employee;
+        });
+        return employees;
+    } catch (error: unknown) {
+        throw error;
+    }
 };
 
 /**
@@ -20,31 +36,41 @@ export const getAllEmployees = async (): Promise<Employee[]> => {
  */
 export const makeEmployee = async (employeeData: Omit<Employee, "id">
 ): Promise<Employee> => {
-    let newId: number = 1;
+    // let newId: number = 1;
 
-    // Find employee ids and sort
-    const employeeIds: number[] = employees.map(employee => employee.id).sort((a, b) => a - b);
+    // // Find employee ids and sort
+    // const employeeIds: number[] = employees.map(employee => employee.id).sort((a, b) => a - b);
 
-    // Generate new id
-    for (const id of employeeIds) {
-        if (id !== newId) {
-            break; 
+    // // Generate new id
+    // for (const id of employeeIds) {
+    //     if (id !== newId) {
+    //         break; 
+    //     }
+    //     newId = id + 1;
+    // }
+
+    // const newEmployee: Employee = {
+    //     id: newId,
+    //     name: employeeData.name,
+    //     position: employeeData.position,
+    //     department: employeeData.department,
+    //     email: employeeData.email,
+    //     phoneNumber: employeeData.phoneNumber,
+    //     branchId: employeeData.branchId
+    // };
+
+    // employees.push(newEmployee);
+    // return newEmployee;
+    try {
+        const newEmployee: Partial<Employee> = {
+            ...employeeData
         }
-        newId = id + 1;
+
+        const employeeId: string = await createDocument<Employee>("employees", newEmployee)
+        return structuredClone({id: employeeId, ...newEmployee} as Employee)
+    } catch (error: unknown){
+        throw error;
     }
-
-    const newEmployee: Employee = {
-        id: newId,
-        name: employeeData.name,
-        position: employeeData.position,
-        department: employeeData.department,
-        email: employeeData.email,
-        phoneNumber: employeeData.phoneNumber,
-        branchId: employeeData.branchId
-    };
-
-    employees.push(newEmployee);
-    return newEmployee;
 };
 
 /**
@@ -90,14 +116,6 @@ export const updateEmployee = async (
     if (index === -1) {
         throw new Error("Employee not found.");
     }
-    // // Allowed fields
-    // const allowedFields: string[] = ["position", "department", "email", "phoneNumber", "branchId"];
-
-    // // Compare incoming fields with allowed fields 
-    // const invalidFields: string[] = Object.keys(employeeData).filter(key => !allowedFields.includes(key));
-    // if (invalidFields.length > 0) {
-    //     throw new Error(`Invalid field(s) provided: ${invalidFields.join(", ")}`);
-    // }
 
     const updatedEmployee: Employee = {
         ...employees[index],
