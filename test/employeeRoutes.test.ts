@@ -27,7 +27,7 @@ describe("POST /employees endpoint", () => {
             position: "Test Position",
             department: "Test Department",
             email: "Testemail@test.com",
-            phoneNumber: 2041231231,
+            phoneNumber: 1234567890,
             branchId: 123
         };
 
@@ -62,14 +62,14 @@ describe("GET /employees/:id endpoint", () => {
     it("Should successfully retrieve employee by Id.", async () => {
 
         // Arrange
-        const employeeId: number = 1; 
+        const employeeId: string = "1"; 
 
         // Act
         const res: Response = await request(app).get(`/api/v1/employees/${employeeId}`);
 
         // Assert
-        const expectedEmployee: Employee = { 
-            id: 1,
+        const expectedEmployee: Employee = {
+            id: "1",
             name: "Alice Johnson",
             position: "Branch Manager",
             department: "Management",
@@ -99,7 +99,7 @@ describe("PUT /api/v1/employees/:id endpoint", () => {
     it("Should return an updated employee.", async () => {
 
         // Arrange
-        const employeeId: number = 1;
+        const employeeId: string = "Cc76B8iaEyUzBhlDCBS4";
         const updatedEmployee: Partial<Employee> = {
             position: "Test Position"
         };
@@ -142,7 +142,7 @@ describe("DELETE /api/v1/employees/:id", () => {
     it("Should successfully delete an employee.", async () => {
 
         // Arrange
-        const employeeId: number = 1;
+        const employeeId: string = "Cc76B8iaEyUzBhlDCBS4";
 
         // Act
         const res: Response = await request(app).delete(`/api/v1/employees/${employeeId}`);
