@@ -82,7 +82,7 @@ export const createEmployee = async (req: Request, res: Response, next: NextFunc
  */
 export const getEmployeeById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const id: number = parseInt(req.params.id);
+        const id: string = req.params.id;
         const employee: Employee = await employeeService.getEmployeeById(id);
         res.status(HTTP_STATUS.OK).json(successResponse(employee, "Employee Found."));
     }
@@ -101,7 +101,7 @@ export const getEmployeeById = async (req: Request, res: Response, next: NextFun
  */
 export const updateEmployee = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const id: number = parseInt(req.params.id);
+        const id: string = req.params.id;
         const employeeData: Pick<Employee, "position" | "branchId" | "department" | "email" | "phoneNumber"> = req.body;
 
         const updatedEmployee: Employee = await employeeService.updateEmployee(id, employeeData);
@@ -122,10 +122,10 @@ export const updateEmployee = async (req: Request, res: Response, next: NextFunc
  */
 export const deleteEmployee = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const id: number = parseInt(req.params.id);
-        const deletedEmployee: Employee = await employeeService.deleteEmployee(id);
+        const id: string = req.params.id;
+        await employeeService.deleteEmployee(id);
 
-        res.status(HTTP_STATUS.OK).json(successResponse(deletedEmployee, "Employee deleted successfully." ));
+        res.status(HTTP_STATUS.OK).json(successResponse("Employee deleted successfully." ));
     } catch (error) {
         res.status(HTTP_STATUS.NOT_FOUND).json(errorResponse("Could not find employee.", "NOT FOUND"));
         next(error);

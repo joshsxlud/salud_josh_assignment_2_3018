@@ -1,10 +1,16 @@
 import { 
     QuerySnapshot,
-    DocumentData
+    DocumentData,
+    DocumentSnapshot
  } from "firebase-admin/firestore";
 import { employees, MatchingBranches, MatchingDepartment } from "../../../data/employees";
 import { Employee } from "../models/employeeModel"
-import { createDocument, getDocuments } from "../repositories/repositoryFunctions";
+import { 
+    createDocument,
+    getDocuments,
+    getDocumentById, 
+    deleteDocument,
+    updateDocument} from "../repositories/repositoryFunctions";
 
 /**
  * A service to retrieve all employees.
@@ -36,7 +42,6 @@ export const getAllEmployees = async (): Promise<Employee[]> => {
  */
 export const makeEmployee = async (employeeData: Omit<Employee, "id">
 ): Promise<Employee> => {
-    // let newId: number = 1;
 
     // // Find employee ids and sort
     // const employeeIds: number[] = employees.map(employee => employee.id).sort((a, b) => a - b);
@@ -80,22 +85,42 @@ export const makeEmployee = async (employeeData: Omit<Employee, "id">
  * @returns - A structured clone of the employee object to avoid
  *            direct mutation.
  */
-export const getEmployeeById = async (id: number): Promise<Employee> => {
-    let employeeById: Employee | undefined;
+export const getEmployeeById = async (id: string): Promise<Employee> => {
+    // let employeeById: Employee | undefined;
 
-    for (const employee of employees) {
-        if (employee.id === id) {
+    // for (const employee of employees) {
+    //     if (employee.id === id) {
 
-            employeeById = employee;
-            break;
+    //         employeeById = employee;
+    //         break;
+    //     }
+    // }
+
+    // if (!employeeById) {
+    //     throw new Error("Employee not found.");
+    // }
+
+    // return structuredClone(employeeById);
+        try {
+        const doc: DocumentSnapshot | null = await getDocumentById(
+            "employees",
+            id
+        );
+
+        if (!doc) {
+            throw new Error(`Employee with Id ${id} not found`);
         }
-    }
 
-    if (!employeeById) {
-        throw new Error("Employee not found.");
-    }
+        const data: DocumentData | undefined = doc.data();
+        const employee: Employee = {
+            id: doc.id,
+            ...data,
+        } as unknown as Employee;
 
-    return structuredClone(employeeById);
+        return structuredClone(employee);
+    } catch (error: unknown) {
+        throw error;
+    }
 };
 
 /**
@@ -107,25 +132,37 @@ export const getEmployeeById = async (id: number): Promise<Employee> => {
  *            direct mutation.
  */
 export const updateEmployee = async (
-    id: number,
+    id: string,
     employeeData: Pick<Employee, "position" | "department" | "email" | "phoneNumber" | "branchId">
 ): Promise<Employee> => {
 
-    const index: number = employees.findIndex((employee: Employee) => employee.id === id);
-
-    if (index === -1) {
-        throw new Error("Employee not found.");
+    try {
+        const employee: Employee = await getEmployeeById(id);
+    
+        if (!employee) {
+            throw new Error(`Employee with Id ${id} not found`);
+        }
+    
+        const updatedEmployee: Employee = {
+            ...employee
+        };
+        
+        if (employeeData.branchId !== undefined) updatedEmployee.branchId = employeeData.branchId;
+        if (employeeData.department !== undefined) updatedEmployee.department = employeeData.department
+        if (employeeData.email !== undefined) updatedEmployee.email = employeeData.email
+        if (employeeData.position !== undefined) updatedEmployee.position = employeeData.position
+        if (employeeData.phoneNumber !== undefined) updatedEmployee.phoneNumber = employeeData.phoneNumber
+    
+        await updateDocument<Employee>("employees", id, updatedEmployee);
+    
+        return structuredClone(updatedEmployee);
+    } catch (error: unknown){
+        throw new Error ("Could not update employee.")
     }
 
-    const updatedEmployee: Employee = {
-        ...employees[index],
-        ...employeeData
-    };
 
-    // Update employee array with updated fields
-    employees[index] = updatedEmployee;
 
-    return structuredClone(employees[index]);
+    
 };
 
 /**
@@ -134,18 +171,28 @@ export const updateEmployee = async (
  * @param id - The id of the employee being deleted.
  * @returns - The deleted employee object.
  */
-export const deleteEmployee = async (id: number): Promise<Employee> => {
+export const deleteEmployee = async (id: string): Promise<void> => {
 
-    const index: number = employees.findIndex((employee: Employee) => employee.id === id);
+    // const index: number = employees.findIndex((employee: Employee) => employee.id === id);
 
-    if (index === -1) {
-        throw new Error("Employee not found.");
+    // if (index === -1) {
+    //     throw new Error("Employee not found.");
+    // }
+
+    // // Remove employee from the array
+    // const [deletedEmployee] = employees.splice(index, 1);
+
+    // return deletedEmployee;
+    const employee: Employee = await getEmployeeById(id);
+    try {
+        if (!employee) {
+            throw new Error(`Cannot find employee with Id ${id} not found.`)
+        }
+
+        await deleteDocument("employees", id);
+    } catch (error: unknown ) {
+        throw new Error;
     }
-
-    // Remove employee from the array
-    const [deletedEmployee] = employees.splice(index, 1);
-
-    return deletedEmployee;
 };
 
 /**

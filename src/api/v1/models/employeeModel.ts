@@ -1,6 +1,6 @@
 // An interface representing an employee
 export interface Employee {
-  id: number;
+  id?: string;
   name: string;
   position: string;
   department: string;
