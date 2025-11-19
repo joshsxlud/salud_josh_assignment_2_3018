@@ -5,6 +5,7 @@ dotenv.config();
 import { getCorsOptions } from "../config/corsConfig";
 import cors from "cors";
 import { getHelmetConfig } from "../config/helmetConfig";
+import setupSwagger from "../config/swagger";
 import morgan from "morgan";
 import employeeRoutes from "./api/v1/routes/employeeRoutes";
 import branchRoutes from "./api/v1/routes/branchRoutes";
@@ -17,6 +18,7 @@ app.use(cors(getCorsOptions()));
 app.use(morgan("combined"));
 app.use(express.json());
 app.use(validationMiddleware);
+setupSwagger(app);
 
 app.get("/api/v1/health", (req, res) => {
     res.json({
@@ -29,5 +31,6 @@ app.get("/api/v1/health", (req, res) => {
 
 app.use("/api/v1", employeeRoutes);
 app.use("/api/v1", branchRoutes);
+
 
 export default app;
