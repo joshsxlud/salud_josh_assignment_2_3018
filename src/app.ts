@@ -2,7 +2,7 @@ import express, { Express } from "express";
 import dotenv from "dotenv";
 
 dotenv.config();
-
+import { getHelmetConfig } from "../config/helmetConfig";
 import morgan from "morgan";
 import employeeRoutes from "./api/v1/routes/employeeRoutes";
 import branchRoutes from "./api/v1/routes/branchRoutes";
@@ -10,6 +10,7 @@ import { validationMiddleware } from "../src/api/v1/middleware/validationMiddlew
 
 const app: Express = express();
 
+app.use(getHelmetConfig());
 app.use(morgan("combined"));
 app.use(express.json());
 app.use(validationMiddleware);
