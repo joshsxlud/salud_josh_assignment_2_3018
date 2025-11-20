@@ -11,7 +11,34 @@ const employeeSchema: Joi.ObjectSchema = Joi.object({
 
 const employeeKeys: string[] = Object.keys(employeeSchema.describe().keys);
 
-// Validation schema for creating an employee.
+/**
+ * @openapi
+ *   components:
+ *     schemas:
+ *      Employee:
+ *        type: object
+ *        required:
+ *         - name
+ *        - position
+ *        - department
+ *        - email
+ *        - phoneNumber
+ *        - branchId
+ *       properties:
+ *         name:
+ *           type: string
+ *         position:
+ *           type: string
+ *         department:
+ *           type: string
+ *         email:
+ *           type: string
+ *           format: email
+ *         phoneNumber:
+ *           type: number
+ *         branchId:
+ *           type: number
+ */
 export const createEmployeeSchema: Joi.ObjectSchema = employeeSchema
     .keys({
         email: Joi.string().email({tlds: {allow: ["com"]}})
@@ -21,6 +48,25 @@ export const createEmployeeSchema: Joi.ObjectSchema = employeeSchema
 
 
 // Validation schema for updating an employee.
+/**
+ * @openapi
+ *   components:
+ *     schemas:
+ *      UpdateEmployee:
+ *        type: object
+ *        properties:
+ *         position:
+ *           type: string
+ *         department:
+ *           type: string
+ *         email:
+ *           type: string
+ *           format: email
+ *         phoneNumber:
+ *           type: number
+ *         branchId:
+ *           type: number
+ */
 export const updateEmployeeSchema: Joi.ObjectSchema = employeeSchema
     .keys({
         id: Joi.number().forbidden(),
