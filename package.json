@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/joshsxlud/salud_josh_assignment_2_3018#readme",
   "devDependencies": {
+    "@redocly/cli": "^2.11.1",
     "@types/jest": "^30.0.0",
     "@types/morgan": "^1.9.10",
     "@types/node": "^24.6.0",
