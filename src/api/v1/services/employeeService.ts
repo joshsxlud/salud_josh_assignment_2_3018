@@ -1,4 +1,15 @@
-import { employees, Employee, MatchingBranches, MatchingDepartment } from "../../../data/employees";
+import { 
+    QuerySnapshot,
+    DocumentData,
+    DocumentSnapshot
+ } from "firebase-admin/firestore";
+import { Employee, MatchingBranches, MatchingDepartment } from "../models/employeeModel"
+import { 
+    createDocument,
+    getDocuments,
+    getDocumentById, 
+    deleteDocument,
+    updateDocument} from "../repositories/repositoryFunctions";
 
 /**
  * A service to retrieve all employees.
@@ -7,8 +18,19 @@ import { employees, Employee, MatchingBranches, MatchingDepartment } from "../..
  *            direct mutation.
  */
 export const getAllEmployees = async (): Promise<Employee[]> => {
-    
-    return structuredClone(employees);
+    try {
+        const snapshot: QuerySnapshot = await getDocuments("employees");
+        const employees: Employee[] = snapshot.docs.map((doc) => {
+            const data: DocumentData = doc.data();
+            return {
+                id: doc.id,
+                ...data,
+            } as unknown as Employee;
+        });
+        return employees;
+    } catch (error: unknown) {
+        throw error;
+    }
 };
 
 /**
@@ -19,31 +41,16 @@ export const getAllEmployees = async (): Promise<Employee[]> => {
  */
 export const makeEmployee = async (employeeData: Omit<Employee, "id">
 ): Promise<Employee> => {
-    let newId: number = 1;
-
-    // Find employee ids and sort
-    const employeeIds: number[] = employees.map(employee => employee.id).sort((a, b) => a - b);
-
-    // Generate new id
-    for (const id of employeeIds) {
-        if (id !== newId) {
-            break; 
+    try {
+        const newEmployee: Partial<Employee> = {
+            ...employeeData
         }
-        newId = id + 1;
+
+        const employeeId: string = await createDocument<Employee>("employees", newEmployee)
+        return structuredClone({id: employeeId, ...newEmployee} as Employee)
+    } catch (error: unknown){
+        throw error;
     }
-
-    const newEmployee: Employee = {
-        id: newId,
-        name: employeeData.name,
-        position: employeeData.position,
-        department: employeeData.department,
-        email: employeeData.email,
-        phoneNumber: employeeData.phoneNumber,
-        branchId: employeeData.branchId
-    };
-
-    employees.push(newEmployee);
-    return newEmployee;
 };
 
 /**
@@ -53,22 +60,27 @@ export const makeEmployee = async (employeeData: Omit<Employee, "id">
  * @returns - A structured clone of the employee object to avoid
  *            direct mutation.
  */
-export const getEmployeeById = async (id: number): Promise<Employee> => {
-    let employeeById: Employee | undefined;
+export const getEmployeeById = async (id: string): Promise<Employee> => {
+    try {
+        const doc: DocumentSnapshot | null = await getDocumentById(
+            "employees",
+            id
+        );
 
-    for (const employee of employees) {
-        if (employee.id === id) {
-
-            employeeById = employee;
-            break;
+        if (!doc) {
+            throw new Error(`Employee with Id ${id} not found`);
         }
-    }
 
-    if (!employeeById) {
-        throw new Error("Employee not found.");
-    }
+        const data: DocumentData | undefined = doc.data();
+        const employee: Employee = {
+            id: doc.id,
+            ...data,
+        } as unknown as Employee;
 
-    return structuredClone(employeeById);
+        return structuredClone(employee);
+    } catch (error: unknown) {
+        throw error;
+    }
 };
 
 /**
@@ -80,53 +92,50 @@ export const getEmployeeById = async (id: number): Promise<Employee> => {
  *            direct mutation.
  */
 export const updateEmployee = async (
-    id: number,
+    id: string,
     employeeData: Pick<Employee, "position" | "department" | "email" | "phoneNumber" | "branchId">
 ): Promise<Employee> => {
-
-    const index: number = employees.findIndex((employee: Employee) => employee.id === id);
-
-    if (index === -1) {
-        throw new Error("Employee not found.");
+    try {
+        const employee: Employee = await getEmployeeById(id);
+    
+        if (!employee) {
+            throw new Error(`Employee with Id ${id} not found`);
+        }
+    
+        const updatedEmployee: Employee = {
+            ...employee
+        };
+        
+        if (employeeData.branchId !== undefined) updatedEmployee.branchId = employeeData.branchId;
+        if (employeeData.department !== undefined) updatedEmployee.department = employeeData.department
+        if (employeeData.email !== undefined) updatedEmployee.email = employeeData.email
+        if (employeeData.position !== undefined) updatedEmployee.position = employeeData.position
+        if (employeeData.phoneNumber !== undefined) updatedEmployee.phoneNumber = employeeData.phoneNumber
+    
+        await updateDocument<Employee>("employees", id, updatedEmployee);
+    
+        return structuredClone(updatedEmployee);
+    } catch (error: unknown){
+        throw new Error ("Could not update employee.")
     }
-    // Allowed fields
-    const allowedFields: string[] = ["position", "department", "email", "phoneNumber", "branchId"];
-
-    // Compare incoming fields with allowed fields 
-    const invalidFields: string[] = Object.keys(employeeData).filter(key => !allowedFields.includes(key));
-    if (invalidFields.length > 0) {
-        throw new Error(`Invalid field(s) provided: ${invalidFields.join(", ")}`);
-    }
-
-    const updatedEmployee: Employee = {
-        ...employees[index],
-        ...employeeData
-    };
-
-    // Update employee array with updated fields
-    employees[index] = updatedEmployee;
-
-    return structuredClone(employees[index]);
 };
 
 /**
  * A service to delete an employee. 
  * 
  * @param id - The id of the employee being deleted.
- * @returns - The deleted employee object.
  */
-export const deleteEmployee = async (id: number): Promise<Employee> => {
+export const deleteEmployee = async (id: string): Promise<void> => {
+    const employee: Employee = await getEmployeeById(id);
+    try {
+        if (!employee) {
+            throw new Error(`Cannot find employee with Id ${id} not found.`)
+        }
 
-    const index: number = employees.findIndex((employee: Employee) => employee.id === id);
-
-    if (index === -1) {
-        throw new Error("Employee not found.");
+        await deleteDocument("employees", id);
+    } catch (error: unknown ) {
+        throw new Error;
     }
-
-    // Remove employee from the array
-    const [deletedEmployee] = employees.splice(index, 1);
-
-    return deletedEmployee;
 };
 
 /**
@@ -136,23 +145,30 @@ export const deleteEmployee = async (id: number): Promise<Employee> => {
  * @returns - An array of employees that work at the same branch.
  */
 export const getEmployeesByBranch = async (branchId: number): Promise<MatchingBranches[]> => {
-    const matchingBranches: MatchingBranches[] = [];
+    try {
+        const snapshot: QuerySnapshot = await getDocuments("employees");
 
-    for (const employee of employees) {
-        if (employee.branchId === branchId) {
-            
-            const {branchId, name, department} = employee;
+        const matchingBranches: MatchingBranches[] = [];
 
-            matchingBranches.push({branchId, name, department})
+        snapshot.docs.forEach((doc) => {
+            const data: DocumentData = doc.data();
+            if (data.branchId === branchId) {
+                matchingBranches.push({
+                    branchId: data.branchId,
+                    name: data.name,
+                    department: data.department,
+                });
+            }
+        });
+
+        if (matchingBranches.length === 0) {
+            throw new Error("This branch has no employees.");
         }
-    }
 
-    // When branchId does not match any employees
-    if (matchingBranches.length === 0) {
-        throw new Error("This branch has no employees.");
+        return matchingBranches;
+    } catch (error: unknown) {
+        throw error;
     }
-
-    return matchingBranches;
 };
 
 /**
@@ -162,21 +178,28 @@ export const getEmployeesByBranch = async (branchId: number): Promise<MatchingBr
  * @returns - An array of employees in the same department.
  */
 export const getEmployeesByDepartment = async (department: string): Promise<MatchingDepartment[]> => {
-    const MatchingDepartments: MatchingDepartment[] = [];
+    try {
+        const snapshot: QuerySnapshot = await getDocuments("employees");
 
-    for (const employee of employees) {
-        if (employee.department === department) {
-            
-            const { branchId, name, department} = employee;
+        const matchingDepartments: MatchingDepartment[] = [];
 
-            MatchingDepartments.push({branchId, name, department})
+        snapshot.docs.forEach((doc) => {
+            const data: DocumentData = doc.data();
+            if (data.department === department) {
+                matchingDepartments.push({
+                    branchId: data.branchId,
+                    name: data.name,
+                    department: data.department,
+                });
+            }
+        });
+
+        if (matchingDepartments.length === 0) {
+            throw new Error("This department has no employees.");
         }
-    }
 
-    // When the department does not match any employees
-    if (MatchingDepartments.length === 0) {
-        throw new Error("This department has no employees.");
+        return matchingDepartments;
+    } catch (error: unknown) {
+        throw error;
     }
-
-    return MatchingDepartments;
 };

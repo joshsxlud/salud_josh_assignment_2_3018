@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import * as branchService from "../services/branchService";
-import { Branch } from "src/data/branches";
+import { Branch } from "../models/branchModel";
 import { HTTP_STATUS } from "../../constants/httpConstants";
+import { errorResponse, successResponse } from "../models/responseModel";
 
 /**
  * Controller to retrieve all branches.
@@ -40,20 +41,7 @@ export const makeBranch = async (req: Request, res: Response, next: NextFunction
             address: string;
             phoneNumber: number;
         } = req.body;
-
-        // Validate inputs
-        if (!name) {
-            res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Name is required."});
-        }
-
-        if (!phoneNumber) {
-            res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Phone number is required."});
-        }
-
-        if (!address) {
-            res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Address is required."});
-        }
-
+        
         const branchData: {
             name: string;
             address: string;
@@ -82,7 +70,7 @@ export const makeBranch = async (req: Request, res: Response, next: NextFunction
  */
 export const getBranchById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const id: number = parseInt(req.params.id);
+        const id: string = req.params.id;
         const branch: Branch = await branchService.getBranchById(id);
 
         res.status(HTTP_STATUS.OK).json({message: "Branch Found", data: branch});
@@ -102,7 +90,7 @@ export const getBranchById = async (req: Request, res: Response, next: NextFunct
  */
 export const updateBranch = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const id: number = parseInt(req.params.id);
+        const id: string = req.params.id;
         const branchData: Pick<Branch, "address" | "phoneNumber"> = req.body;
 
         const updatedBranch: Branch = await branchService.updateBranch(id, branchData);
@@ -123,12 +111,12 @@ export const updateBranch = async (req: Request, res: Response, next: NextFuncti
  */
 export const deleteBranch = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const id: number = parseInt(req.params.id);
-        const deletedBranch: Branch = await branchService.deleteBranch(id);
+        const id: string = req.params.id;
+        await branchService.deleteBranch(id);
 
-        res.status(HTTP_STATUS.OK).json({message: "Branch Deleted.", data: deletedBranch});
+        res.status(HTTP_STATUS.OK).json(successResponse("Branch deleted successfully."));
     } catch (error) {
-        res.status(HTTP_STATUS.NOT_FOUND).json({message: String(error)});
+        res.status(HTTP_STATUS.NOT_FOUND).json(errorResponse("Could not delete branch"));
         next(error);
     }
 };

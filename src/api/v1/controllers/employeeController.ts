@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import * as employeeService from "../services/employeeService";
-import { Employee, MatchingBranches, MatchingDepartment } from "src/data/employees";
 import { HTTP_STATUS } from "../../constants/httpConstants";
-
+import { Employee, MatchingBranches, MatchingDepartment  }  from "../models/employeeModel";
+import { successResponse, errorResponse } from "../models/responseModel";
 /**
  * Controller to retrieve all employees.
  * 
@@ -13,13 +13,12 @@ import { HTTP_STATUS } from "../../constants/httpConstants";
 export const getAllEmployees = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try{
         const employees: Employee[] = await employeeService.getAllEmployees();
-        res.status(HTTP_STATUS.OK).json({message: "Get all employees", data: employees});
+        res.status(HTTP_STATUS.OK).json(successResponse(employees, "Employees successfully retrieved."));
         
     } catch (error) {
-        res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Failed to retrieve employees."});
+        res.status(HTTP_STATUS.BAD_REQUEST).json(errorResponse("Could not retrieve employees.", "HTTP_STATUS.BAD_REQUEST"));
         next(error);
     }
-
 };
 
 /**
@@ -47,31 +46,6 @@ export const createEmployee = async (req: Request, res: Response, next: NextFunc
                 branchId: number;
             } = req.body;
 
-        // Validate inputs
-        if (!name) {
-            res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Name is required."});
-        }
-
-        if (!position) {
-            res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Position is required."});
-        }
-
-        if (!department) {
-            res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Department is required."});
-        }
-
-        if (!email) {
-            res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Email is required."});
-        }
-
-        if (!phoneNumber) {
-            res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Phone number is required."});
-        }
-
-        if (!branchId) {
-            res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Branch Id is required."});
-        }
-
         const employeeData: {
             name: string;
             position: string;
@@ -89,10 +63,10 @@ export const createEmployee = async (req: Request, res: Response, next: NextFunc
         }
 
         const newEmployee: Employee = await employeeService.makeEmployee(employeeData);
-        res.status(HTTP_STATUS.CREATED).json({message: "Employee has been created.", data: newEmployee});
+        res.status(HTTP_STATUS.CREATED).json(successResponse(newEmployee, "Employee created successfully."));
 
     } catch (error) {
-        res.status(HTTP_STATUS.BAD_REQUEST).json({message: "Failed to create an employee."});
+        res.status(HTTP_STATUS.BAD_REQUEST).json(errorResponse("Could not create employee.", "BAD REQUEST"));
         next(error);
     }
 };
@@ -106,12 +80,12 @@ export const createEmployee = async (req: Request, res: Response, next: NextFunc
  */
 export const getEmployeeById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const id: number = parseInt(req.params.id);
+        const id: string = req.params.id;
         const employee: Employee = await employeeService.getEmployeeById(id);
-        res.status(HTTP_STATUS.OK).json({message: "Employee Found", data: employee});
+        res.status(HTTP_STATUS.OK).json(successResponse(employee, "Employee Found."));
     }
     catch (error) {
-        res.status(HTTP_STATUS.NOT_FOUND).json({message: String(error)});
+        res.status(HTTP_STATUS.NOT_FOUND).json(errorResponse("Could not find employee.", "NOT FOUND"));
         next(error);
     }
 };
@@ -125,14 +99,14 @@ export const getEmployeeById = async (req: Request, res: Response, next: NextFun
  */
 export const updateEmployee = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const id: number = parseInt(req.params.id);
+        const id: string = req.params.id;
         const employeeData: Pick<Employee, "position" | "branchId" | "department" | "email" | "phoneNumber"> = req.body;
 
         const updatedEmployee: Employee = await employeeService.updateEmployee(id, employeeData);
 
-        res.status(HTTP_STATUS.OK).json({message: "Employee information updated.", data: updatedEmployee});
+        res.status(HTTP_STATUS.OK).json(successResponse(updatedEmployee, "Employee has been updated."));
     } catch (error) {
-        res.status(HTTP_STATUS.NOT_FOUND).json({message: String(error)});
+        res.status(HTTP_STATUS.NOT_FOUND).json(errorResponse("Could not find employee.", "NOT FOUND"));
         next(error);
     }
 };
@@ -146,12 +120,12 @@ export const updateEmployee = async (req: Request, res: Response, next: NextFunc
  */
 export const deleteEmployee = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const id: number = parseInt(req.params.id);
-        const deletedEmployee: Employee = await employeeService.deleteEmployee(id);
+        const id: string = req.params.id;
+        await employeeService.deleteEmployee(id);
 
-        res.status(HTTP_STATUS.OK).json({message: "Employee Deleted.", data: deletedEmployee});
+        res.status(HTTP_STATUS.OK).json(successResponse("Employee deleted successfully." ));
     } catch (error) {
-        res.status(HTTP_STATUS.NOT_FOUND).json({message: String(error)});
+        res.status(HTTP_STATUS.NOT_FOUND).json(errorResponse("Could not find employee.", "NOT FOUND"));
         next(error);
     }
 };
@@ -167,10 +141,10 @@ export const getEmployeesByBranch = async (req: Request, res: Response, next: Ne
     try{
         const branchId: number = parseInt(req.params.branchId);
         const matchingBranches: MatchingBranches[] = await employeeService.getEmployeesByBranch(branchId);
-        res.status(HTTP_STATUS.OK).json({message: `Employees belonging to branch ${branchId}`, data: matchingBranches});
+        res.status(HTTP_STATUS.OK).json(successResponse(matchingBranches, `Employees belonging to branch ${branchId}.`));
 
     } catch (error) {
-        res.status(HTTP_STATUS.NOT_FOUND).json({message: String(error)});
+        res.status(HTTP_STATUS.NOT_FOUND).json(errorResponse("Could not find employees.", "NOT FOUND"));
         next(error);
     }
 };
@@ -186,10 +160,10 @@ export const getEmployeesByDepartment = async (req: Request, res: Response, next
     try{
         const department: string = req.params.department;
         const MatchingDepartments: MatchingDepartment[] = await employeeService.getEmployeesByDepartment(department);
-        res.status(HTTP_STATUS.OK).json({message: `Employees belonging to ${department}`, data: MatchingDepartments});
+        res.status(HTTP_STATUS.OK).json(successResponse(MatchingDepartments, `Employees belonging to ${department} Department.`));
         
     } catch (error) {
-        res.status(HTTP_STATUS.NOT_FOUND).json({message: String(error)});
+        res.status(HTTP_STATUS.NOT_FOUND).json(errorResponse("Could not find employees.", "NOT FOUND"));
         next(error);
     }
 };

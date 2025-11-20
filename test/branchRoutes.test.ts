@@ -1,7 +1,7 @@
 import request, { Response } from "supertest";
 import app from "../src/app"
 import { HTTP_STATUS } from "../src/api/constants/httpConstants";
-import { Branch } from "../src/data/branches";
+import { Branch } from "../src/api/v1/models/branchModel";
 
 describe("GET /branches endpoint", () => {
     it("Should return all employees.", async () => {
@@ -61,7 +61,6 @@ describe("GET /branches/:id", () => {
 
         // Assert
         const expectedBranch: Branch = {
-            "id": 1,
             "name": "Vancouver Branch",
             "address": "1300 Burrard St, Vancouver, BC, V6Z 2C7",
             "phoneNumber": 6044560022           
@@ -88,13 +87,12 @@ describe("PUT /api/v1/branches/:id endpoint", () => {
     it("Should return an updated branch.", async () => {
 
         // Arrange
-        const branchId: number = 1;
         const updatedBranch: Partial<Branch> = {
             phoneNumber: 1233214321
         };
 
         // Act
-        const res: Response = await request(app).put(`/api/v1/branches/${branchId}`).send(updatedBranch);
+        const res: Response = await request(app).put(`/api/v1/branches/1`).send(updatedBranch);
         expect(res.status).toBe(HTTP_STATUS.OK);
         expect(res.body.data.phoneNumber).toBe(1233214321);
     });
@@ -123,7 +121,7 @@ describe("PUT /api/v1/branches/:id endpoint", () => {
         const res: Response = await request(app).put(`/api/v1/branches/${branchId}`).send(invalidUpdate);
 
         // Assert
-        expect(res.status).toBe(HTTP_STATUS.NOT_FOUND);
+        expect(res.status).toBe(HTTP_STATUS.BAD_REQUEST);
 
     });
 });
@@ -132,7 +130,7 @@ describe("DELETE /api/v1/branches/:id", () => {
     it("Should successfully delete a branch.", async () => {
 
         // Arrange
-        const branchId: number = 1;
+        const branchId: string = "1";
 
         // Act
         const res: Response = await request(app).delete(`/api/v1/branches/${branchId}`);

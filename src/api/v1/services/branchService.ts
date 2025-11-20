@@ -1,13 +1,34 @@
-import { branches, Branch } from "../../../data/branches";
-
+import { Branch } from "../models/branchModel";
+import { 
+    QuerySnapshot,
+    DocumentData,
+    DocumentSnapshot
+ } from "firebase-admin/firestore";
+import { 
+    createDocument,
+    getDocuments,
+    getDocumentById, 
+    deleteDocument,
+    updateDocument} from "../repositories/repositoryFunctions";
 /**
  * A service to retrieve all branches.
  * 
  * @returns A structure clone of all the branches to avoid direct mutation.
  */
 export const getAllBranches = async (): Promise<Branch[]> => {
-    
-    return structuredClone(branches);
+    try {
+        const snapshot: QuerySnapshot = await getDocuments("branches");
+        const branches: Branch[] = snapshot.docs.map((doc) => {
+            const data: DocumentData = doc.data();
+            return {
+                id: doc.id,
+                ...data,
+            } as unknown as Branch;
+        });
+        return branches;
+    } catch (error: unknown) {
+        throw error;
+    }
 };
 
 /**
@@ -19,28 +40,16 @@ export const getAllBranches = async (): Promise<Branch[]> => {
 export const makeBranch = async (branchData: Omit<Branch, "id">
 ): Promise<Branch> => {
 
-    let newId: number = 1;
-
-    // Find branch ids and sort
-    const branchIds: number[] = branches.map(branch => branch.id).sort((a, b) => a - b);
-
-    // Generate new id
-    for (const id of branchIds) {
-        if (id !== newId) {
-            break; 
+    try {
+        const newBranch: Partial<Branch> = {
+            ...branchData
         }
-        newId = id + 1;
+
+        const branchId: string = await createDocument<Branch>("branches", newBranch)
+        return structuredClone({id: branchId, ...newBranch} as Branch)
+    } catch (error: unknown){
+        throw error;
     }
-
-    const newBranch: Branch = {
-        id: newId,
-        name: branchData.name,
-        address: branchData.address,
-        phoneNumber: branchData.phoneNumber
-    };
-
-    branches.push(newBranch);
-    return newBranch;
 };
 
 /**
@@ -50,22 +59,27 @@ export const makeBranch = async (branchData: Omit<Branch, "id">
  * @returns - A restructured clone of the branch object to avoid direct mutation
  *            of the branch object. 
  */
-export const getBranchById = async (id: number): Promise<Branch> => {
-    let branchById: Branch | undefined;
+export const getBranchById = async (id: string): Promise<Branch> => {
+    try {
+        const doc: DocumentSnapshot | null = await getDocumentById(
+            "branches",
+            id
+        );
 
-    for (const branch of branches) {
-        if (branch.id === id) {
-
-            // Assign as a copy
-            branchById = {...branch};
+        if (!doc) {
+            throw new Error(`Branch with Id ${id} not found`);
         }
-    }
 
-    if (!branchById) {
-        throw new Error("Branch not found.");
-    }
+        const data: DocumentData | undefined = doc.data();
+        const branch: Branch = {
+            id: doc.id,
+            ...data,
+        } as unknown as Branch;
 
-    return structuredClone(branchById);
+        return structuredClone(branch);
+    } catch (error: unknown) {
+        throw error;
+    }
 };
 
 /**
@@ -77,52 +91,45 @@ export const getBranchById = async (id: number): Promise<Branch> => {
  *            of the branch object.
  */
 export const updateBranch = async (
-    id: number,
+    id: string,
     branchData: Pick<Branch, "address" | "phoneNumber">
 ): Promise<Branch> => {
-
-    const index: number = branches.findIndex((branch: Branch) => branch.id === id);
-
-    if (index === -1) {
-        throw new Error("Branch not found.");
+    try {
+        const branch: Branch = await getBranchById(id);
+    
+        if (!branch) {
+            throw new Error(`Branch with Id ${id} not found`);
+        }
+    
+        const updatedBranch: Branch = {
+            ...branch
+        };
+        
+        if (branchData.address !== undefined) updatedBranch.address = branchData.address
+        if (branchData.phoneNumber !== undefined) updatedBranch.phoneNumber = branchData.phoneNumber
+    
+        await updateDocument<Branch>("branches", id, updatedBranch);
+    
+        return structuredClone(updatedBranch);
+    } catch (error: unknown){
+        throw new Error ("Could not update branch.")
     }
-
-    // Allowed fields
-    const allowedFields: string[] = ["phoneNumber", "address"];
-
-    // Compare incoming fields with allowed fields 
-    const invalidFields: string[] = Object.keys(branchData).filter(key => !allowedFields.includes(key));
-    if (invalidFields.length > 0) {
-        throw new Error(`Invalid field(s) provided: ${invalidFields.join(", ")}`);
-    }
-
-    const updatedBranch: Branch = {
-        ...branches[index],
-        ...branchData
-    };
-
-    // Update employee array with updated fields
-    branches[index] = updatedBranch;
-
-    return structuredClone(branches[index]);
 };
 
 /**
  * A service to delete an existing branch.
  * 
  * @param id - The id of the branch being deleted.
- * @returns - The deleted branch object.
  */
-export const deleteBranch = async (id: number): Promise<Branch> => {
+export const deleteBranch = async (id: string): Promise<void> => {
+    const branch: Branch = await getBranchById(id);
+    try {
+        if (!branch) {
+            throw new Error(`Cannot find branch with Id ${id} .`)
+        }
 
-    const index: number = branches.findIndex((branch: Branch) => branch.id === id);
-
-    if (index === -1) {
-        throw new Error("branch not found.");
+        await deleteDocument("branches", id);
+    } catch (error: unknown) {
+        throw new Error;
     }
-
-    // Remove employee from the array
-    const [deletedBranch] = branches.splice(index, 1);
-
-    return deletedBranch;
 };
