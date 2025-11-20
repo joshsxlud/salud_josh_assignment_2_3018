@@ -24,20 +24,20 @@ const employeeRouter: Router = express.Router();
  *     '200:':
  *      description: Employees successfully retrieved.
  *      content: 
- *        application/json
- *        schema:
- *          type: object
- *          properties:
- *            id:
- *              type: string
- *            name:
- *              type: string
- *            position:
- *              type: string
- *            department: 
- *              type: string
- *            email: 
- *              type: string
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              id:
+ *                type: string
+ *              name:
+ *                type: string
+ *              position:
+ *                type: string
+ *              department: 
+ *                type: string
+ *              email: 
+ *                type: string
  *            phoneNumber:
  *              type: number
  *            branchId:
