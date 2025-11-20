@@ -19,6 +19,7 @@ const employeeRouter: Router = express.Router();
  * /employees:
  *  get:
  *    summary: Retrieve a list of employees
+ *    tags: [Employee]
  *    responses:
  *     '200:':
  *      description: Employees successfully retrieved.
@@ -51,6 +52,7 @@ employeeRouter.get("/employees", getAllEmployees);
  * /employees/{id}:
  *   get:
  *     summary: Retrieve an employee by ID
+ *     tags: [Employee]
  *     parameters:
  *       - name: id
  *         in: path
@@ -90,12 +92,20 @@ employeeRouter.get("/employees/:id", getEmployeeById);
  * /employees:
  *   post:
  *     summary: Create a new employee
+ *     tags: [Employee]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - name
+ *               - position
+ *               - department
+ *               - email
+ *               - phoneNumber
+ *               - branchId
  *             properties:
  *               name:
  *                 type: string
@@ -148,6 +158,89 @@ employeeRouter.post("/employees", createEmployee);
 
 // PUT existing employees
 
+/**
+ * @openapi
+ * /employees/{id}:
+ *   put:
+ *     summary: Update a specific employee's information
+ *     tags: [Employee]
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *           description: The unique identifier of the employee
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - position
+ *               - department
+ *               - email
+ *               - phoneNumber
+ *               - branchId
+ *             properties:
+ *               name:
+ *                 type: string
+ *               position:
+ *                 type: string
+ *               department:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               phoneNumber:
+ *                 type: string
+ *               branchId:
+ *                 type: integer
+ *     responses:
+ *       '201':
+ *         description: Employee updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                 name:
+ *                   type: string
+ *                 position:
+ *                   type: string
+ *                 department:
+ *                   type: string
+ *                 email:
+ *                   type: string
+ *                 phoneNumber:
+ *                   type: string
+ *                 branchId:
+ *                   type: integer
+ *       '400':
+ *         description: Invalid input data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                 message:
+ *                   type: string
+ *       '404':
+ *         description: Employee not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                 message:
+ *                   type: string
+ */
 employeeRouter.put("/employees/:id", updateEmployee);
 
 // DELETE existing employees
