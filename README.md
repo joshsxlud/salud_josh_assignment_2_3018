@@ -34,7 +34,9 @@ This API is used to track and manage the current employees and branches of PiXEL
 
     `npm install`
 
-3. Create a .env file:
+3. Create a `.env` file: 
+
+    - **Note**: Add your `.env` to your .gitignore to avoid pushing secrets to a local repo.
 
     ```.env
     FIREBASE_PROJECT_ID=<your-firebase-project-id>
