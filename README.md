@@ -113,3 +113,74 @@ Install the following extension inside of Visual Studio Code:
 
     1. Follow the guide inside the details of the extension to start a server.
         - Note: The extension uses port 5500 by default. When starting a server using `npm run start` ensure that the port you have selected is **NOT** the same as Live Server.
+
+## Security Configuration
+
+### CORS
+
+```.ts
+export const getCorsOptions = () => {
+    const isDevelopment = process.env.NODE_ENV === "development";
+
+    if (isDevelopment) {
+        return {
+            origin: "http://localhost:3000", // Since will only be in development environment
+            // origin: "*", // for testing with all origins allowed
+            methods: ["GET", "POST", "PUT", "DELETE"],
+            credentials: true,
+        };
+    }
+
+    // Strict origins in production
+    return {
+        origin: process.env.ALLOWED_ORIGINS?.split(",") || [],
+        credentials: true,
+        methods: ["GET", "POST", "PUT", "DELETE"],
+        allowedHeaders: ["Content-Type", "Authorization"],
+    };
+};
+```
+
+This security configuration was grabbed from the notes, and adjusted slightly, according to the needs of the project.
+
+`origin: "http://localhost:3000", // Since will only be in development environment`
+
+- This is one major line that had to be adjusted. With this configuration, even inside of a development environment, the origin is set to localhost, preventing access to resources from other sites (origins).
+
+### Helmet
+
+```ts
+export const getHelmetConfig = () => {
+    const isDevelopment = process.env.NODE_ENV === "development";
+
+    // Base configuration for APIs
+    const baseConfig = {
+        contentSecurityPolicy: false, // Disable for JSON APIs
+        hidePoweredBy: true, // Always hide server info
+        noSniff: true, // Always prevent MIME sniffing
+    };
+
+    if (isDevelopment) {
+        return helmet({
+            ...baseConfig,
+            hsts: false, // No HTTPS enforcement in development
+        });
+    }
+
+    // Production gets full security
+    return helmet({
+        ...baseConfig,
+        hsts: {
+            maxAge: 31536000,
+            includeSubDomains: true,
+            preload: true,
+        },
+        frameguard: { action: "deny" },
+        referrerPolicy: { policy: "no-referrer" },
+    });
+};
+```
+
+No lines were changed with this configuration from the notes.
+
+- It was hard to find a way to change up this configuration and add some custom headers. The reason being, the author of helmet himself responded to a Stack Overflow post enumerating different headers for JSON API's. The configurations outlined were already included, inferring that the current configuration from the notes encompasses most/all needs for this kind of API. Find the link to the comment on the [Stack Overflow post](https://stackoverflow.com/a/60709460).
