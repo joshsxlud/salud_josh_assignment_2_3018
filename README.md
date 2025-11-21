@@ -1,7 +1,5 @@
 # Project Overview
 
----
-
 ## PiXELL River Financial Employee and Branch Management API
 
 ### Description
@@ -93,7 +91,7 @@ curl --location --request DELETE 'http://localhost:3000/api/v1/branches/2' \
 
 PUT (update) employee by ID:
 
-```
+```cURL
 curl --location --request PUT 'http://localhost:3000/api/v1/employees/0KMfjVDKQaZ8t8de0Su5' \
 --header 'Content-Type: application/json' \
 --data '{
