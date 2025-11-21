@@ -114,6 +114,10 @@ Install the following extension inside of Visual Studio Code:
     1. Follow the guide inside the details of the extension to start a server.
         - Note: The extension uses port 5500 by default. When starting a server using `npm run start` ensure that the port you have selected is **NOT** the same as Live Server.
 
+##### Without Live Server
+
+Use `npm run start` to initialize your server, and go to the following link: [http://localhost:3000/api-docs/](http://localhost:3000/api-docs/)
+
 ## Security Configuration
 
 ### CORS
